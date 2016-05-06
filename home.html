@@ -5,7 +5,7 @@
         <link href="./css/style.css" rel="stylesheet" type="text/css" media="all" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <script type="application/x-javascript" src="./js/functions.js"> </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     </head>
     <body>
         <div class="headerHome">	
@@ -41,7 +41,7 @@
             </div>
             <!-- end #sidebar -->
             <div id="content">
-                <div id="entra" class="entry">
+                <div id="post">
                     <p></p>	
                 </div>
             </div>
@@ -50,41 +50,31 @@
         <!-- end #page -->
 
         <script>
-            function changeColor(menu) {
-                var lista = ["operazioni", "clienti", "articoli", "fatture", "fornitori"];
-                var i;
-                for (i = 0; i < lista.length; i++) {
-                    var stringa = lista[i];
-                    if (lista[i] === menu) {
-                        document.getElementById("entra").innerHTML = "";
-                        document.getElementById(menu).style.background = "#4CAF50";
-                    } else {
-                        document.getElementById(stringa).style.background = "#5f5f5f";
-                    }
-                }
-            }
-            function leftMenuOperation(menu) {
-                changeColor(menu);
-                document.getElementById("leftMenu").innerHTML = "<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li><li><a href=# onclick=showOperation()>Mostra Operazioni<ul id='show_operation'></ul></a></li><li><a href=# onclick=concludiOperation()>Concludi</a></li>";
-            }
-            function leftMenuClient(menu) {
-                changeColor(menu);
-                document.getElementById("leftMenu").innerHTML = "<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li><li><a href=# onclick=showClient()>Mostra Clienti<ul id='show_client'></ul></a></li>";
-            }
-            function leftMenuArticle(menu) {
-                changeColor(menu);
-                document.getElementById("leftMenu").innerHTML = "<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li><li><a href=# onclick=inMagazzino()>...in magazzino<ul id=show_op_art1></ul></a></li><li><a href=# onclick=nonMagazzino()>...non in magazzino<ul id=show_op_art2></ul></a></li><li><a href=# onclick=inEsaurimento()>...in esaurimento<ul id=show_op_art3></ul></a></li>";
-            }
-            function leftMenuInvoice(menu) {
-                changeColor(menu);
-                document.getElementById("leftMenu").innerHTML = "<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>";
-            }
-            function leftMenuSupplier(menu) {
-                changeColor(menu);
-                document.getElementById("leftMenu").innerHTML = "<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li><li><a href=# onclick=showSupplier()>Mostra Fornitore<ul id='show_supplier'></ul></a></li>";
-            }
+            $("a").focus(function () {
+                $(this).css("background-color", "#4CAF50");
+            });
+            $("a").blur(function () {
+                $(this).css("background-color", "#5f5f5f");
+            });
+            $("#operazioni").click(function () {
+                $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li><li><a href=# onclick=showOperation()>Mostra Operazioni<ul id='show_operation'></ul></a></li><li><a href=# onclick=concludiOperation()>Concludi</a></li>");
+            });
+            $("#clienti").click(function () {
+                $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li><li><a href=# onclick=showClient()>Mostra Clienti<ul id='show_client'></ul></a></li>");
+            });
+            $("#articoli").click(function () {
+                $("#leftMenu").html("<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li><li><a href=# onclick=inMagazzino()>...in magazzino<ul id=show_op_art1></ul></a></li><li><a href=# onclick=nonMagazzino()>...non in magazzino<ul id=show_op_art2></ul></a></li><li><a href=# onclick=inEsaurimento()>...in esaurimento<ul id=show_op_art3></ul></a></li>");
+            });
+            $("#fatture").click(function () {
+                $("#leftMenu").html("<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>");
+            });
+            $("#fornitori").click(function () {
+                $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li><li><a href=# onclick=showSupplier()>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
+            });
+            
+
             function addOperation() {
-                var right = document.getElementById("entra");
+                var right = document.getElementById("post");
                 s = "<center><form name='add_operation_form'><table border=0><tr>";
                 s += "<td align=left>*Scegli Cliente</td><td><input type=text name=cf size=30></td></tr>";
                 s += "<td align=left>*Scegli Articolo</td><td><input type=text name=cf size=30></td></tr>";
@@ -99,7 +89,7 @@
                 document.getElementById("show_operation").innerHTML = "<li><a href=# onclick=modOperation()>Modifica Operazione</a></li><li><a href=# onclick=delOperation()>Elimina Operazioni</a></li>";
             }
             function addClient() {
-                var right = document.getElementById("entra");
+                var right = document.getElementById("post");
                 s = "<center><form name='addClient'><table border=0><tr>";
                 s += "<td align=left>*Codice Fiscale</td><td><input type=text name=cf size=30></td></tr>";
                 s += "<tr><td align=left>*Nome</td><td><input type=text name=username size=30></td></tr>";
@@ -117,7 +107,7 @@
                 document.getElementById("show_client").innerHTML = "<br><li><a href=# onclick=modClient()>Modifica Cliente</a></li><li><a href=# onclick=delClient()>Elimina Cliente</a></li>";
             }
             function addArticle() {
-                var right = document.getElementById("entra");
+                var right = document.getElementById("post");
                 s = "<center><form name='add_article_form'><table border=0px>";
                 s += "<tr><td>Codice</td><td><input type='text' name='CodArticolo'></td></tr>";
                 s += "<tr><td>Categoria</td><td><input type='text' name='Categoria'></td></tr>";
@@ -143,7 +133,7 @@
             }
             function addSupplier()
             {
-                var right = document.getElementById("entra");
+                var right = document.getElementById("post");
                 s = "<center><form name='addSupplier'><table border=0><tr>";
                 s += "<td align=left>*Codice Fornitore</td><td><input type=text name=cf size=30></td></tr>";
                 s += "<tr><td align=left>*Nome</td><td><input type=text name=username size=30></td></tr>";
