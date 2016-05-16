@@ -169,11 +169,10 @@ body {
 }*/
 /****-----#Content----****/
 #content {
-    width: 718px;
+    /*width: 718px;*/
     /*height: 100%;*/
     margin-left: 205px;
     padding-top: 100px;
-    padding-left: 40px;
     overflow:auto;
     text-align: center;
 }

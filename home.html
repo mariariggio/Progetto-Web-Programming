@@ -10,11 +10,11 @@
     <body>
         <div class="headerHome">	
             <div id="menu">
-                <a id="operazioni" href="#">Operazioni</a>
-                <a id="clienti" href="#">Clienti</a>
-                <a id="articoli" href="#">Articoli</a>
-                <a id="fatture" href="#">Fatture</a>
-                <a id="fornitori" href="#">Fornitori</a>
+                <a id="operazioni" class="menuor" href="#">Operazioni</a>
+                <a id="clienti" class="menuor" href="#">Clienti</a>
+                <a id="articoli" class="menuor" href="#">Articoli</a>
+                <a id="fatture" class="menuor" href="#">Fatture</a>
+                <a id="fornitori" class="menuor" href="#">Fornitori</a>
             </div>
             <!-- end #menu -->
             <div id="search">
@@ -50,30 +50,26 @@
         <!-- end #page -->
 
         <script>
-            $("a").focus(function () {
+            $("a.menuor").focus(function () {
+                $("#post").text("");
                 $(this).css("background-color", "#4CAF50");
             });
-            $("a").blur(function () {
+            $("a.menuor").blur(function () {
                 $(this).css("background-color", "#5f5f5f");
             });
-            $("#operazioni").click(function () {
-                $("#post").text("");
+            $("#operazioni").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li><li><a href=# onclick=showOperation()>Mostra Operazioni<ul id='show_operation'></ul></a></li><li><a href=# onclick=concludiOperation()>Concludi</a></li>");
             });
-            $("#clienti").click(function () {
-                $("#post").text("");
+            $("#clienti").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li><li><a href=# onclick=showClient()>Mostra Clienti<ul id='show_client'></ul></a></li>");
             });
-            $("#articoli").click(function () {
-                $("#post").text("");
+            $("#articoli").click(function () {         
                 $("#leftMenu").html("<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li><li><a href=# onclick=inMagazzino()>...in magazzino<ul id=show_op_art1></ul></a></li><li><a href=# onclick=nonMagazzino()>...non in magazzino<ul id=show_op_art2></ul></a></li><li><a href=# onclick=inEsaurimento()>...in esaurimento<ul id=show_op_art3></ul></a></li>");
             });
-            $("#fatture").click(function () {
-                $("#post").text("");
+            $("#fatture").click(function () {      
                 $("#leftMenu").html("<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>");
             });
-            $("#fornitori").click(function () {
-                $("#post").text("");
+            $("#fornitori").click(function () {        
                 $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li><li><a href=# onclick=showSupplier()>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
             });
             function addOperation() {
