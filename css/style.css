@@ -41,6 +41,11 @@ body.index {
     margin: 8px auto;
     font-family: 'Andika-R', sans-serif;
 }
+#error {
+    font-size: 16px;
+    color: #fff;
+    font-family: 'Andika-R', sans-serif;
+}
 /****-----Home Page----****/
 body {
     margin: 0;
