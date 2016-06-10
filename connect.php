@@ -3,14 +3,12 @@ $host='localhost';
 $user='maria';
 $password='progettoweb';
 $database='pw';
+global $connection;
 //Connessione al database
-$connection = mysql_connect($host, $user, $password);
+$connection= mysqli_connect($host, $user, $password, $database);
+//Verifico stato della connessione
 if (!$connection) {
-    die('Connessione fallita: ' . mysql_error());
+    die("Connection failed: " . mysqli_connect_error());
 }
-//Selezione del database
-$db_selected = mysql_select_db($database, $connection);
-if (!$db_selected) {
-    die("Errore nella selezione del database: " . mysql_error());
-}
+
 ?> 
