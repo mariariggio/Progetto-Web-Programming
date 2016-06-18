@@ -22,7 +22,7 @@ class UseDb {
             }
         if (mysqli_num_rows($query) > 0) {
             return true;
-        }       
+        }      
     }
     
 //metodo che esegue la query per l'inserimento di un nuovo cliente nella
