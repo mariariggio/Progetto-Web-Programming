@@ -40,7 +40,32 @@ class FrameWork {
         $res = $this->db->getClient();
         return ($this->bp->makeClientsTable($res));
     }
-   
+    //Metodo che si occupa dell'inserimento di un nuovo articolo. Chiama un 
+    //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
+    //dei clienti.
+    private function addArticle($request){
+        $messagge = $this->db->newArticle($request);
+        if(is_bool($messagge))
+            return $this->getArticles();
+    }
+    //Ritorna la pagina con gli articoli
+    private function getArticles(){
+        $res = $this->db->getArticle();
+        return ($this->bp->makeArticlesTable($res));
+    }
+    //Metodo che si occupa dell'inserimento di un nuovo fornitore. Chiama un 
+    //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
+    //dei clienti.
+    private function addSupplier($request){
+        $messagge = $this->db->newSupplier($request);
+        if(is_bool($messagge)){}
+            return $this->getSupplier();
+    }
+    //Ritorna la pagina con i clienti
+    private function getSupplier(){
+        $res = $this->db->getSupplier();
+        return ($this->bp->makeSupplierTable($res));
+    }
 }
 
 ?>

@@ -71,7 +71,7 @@ class UseDb {
         $prVend = $value['prezVendita'];
         $codForn = $value['codFornitore'];
         global $connection;
-        $query = mysqli_query("INSERT INTO articoli(codice, categoria, descr, quantita, prezzo_acquisto, prezzo_vendita, cod_fornitore) 
+        $query = mysqli_query($connection,"INSERT INTO articoli(codice, categoria, descr, quantita, prezzo_acquisto, prezzo_vendita, cod_fornitore) 
                               values('$cod', '$cat', '$descr', '$quant', '$prAcq', '$prVend', '$codForn')");
         if(!$query) {
             die("Errore di inserimento: " . mysqli_error($connection));
@@ -116,7 +116,7 @@ class UseDb {
     public function getSupplier() {
         $ret = "...NON CI SONO FORNITORI...";
         global $connection;
-        $query = mysql_query($connection, ("SELECT * FROM fornitori"));
+        $query = mysqli_query($connection, ("SELECT * FROM fornitori"));
         if (!$query) {
             die("Errore nella query getSupplier: " . mysqli_error($connection));
         } else if (mysqli_num_rows($query) > 0) {
