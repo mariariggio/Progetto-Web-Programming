@@ -24,6 +24,10 @@ class UseDb {
             return true;
         }      
     }
+    //
+    public function newOperation($value){
+        
+    }
     
 //metodo che esegue la query per l'inserimento di un nuovo cliente nella
 //tabella clienti del database. Se l'inserimento va a buon fine ritorna
@@ -119,6 +123,18 @@ class UseDb {
         $query = mysqli_query($connection, ("SELECT * FROM fornitori"));
         if (!$query) {
             die("Errore nella query getSupplier: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+             $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);
+        }
+        return $ret;
+    }
+    //metodo che esegue la query che ritorna il tipo di prestazioni offerte
+    public function getManodopera(){
+        $ret= "...Database vuoto... ";
+        global $connection;
+        $query = mysqli_query($connection, ("SELECT * FROM manodopera"));
+          if (!$query) {
+            die("Errore nella query getManodopera: " . mysqli_error($connection));
         } else if (mysqli_num_rows($query) > 0) {
              $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);
         }
