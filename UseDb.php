@@ -18,20 +18,70 @@ class UseDb {
         global $connection;
         $query = mysqli_query($connection,("SELECT * FROM utenti WHERE nome='$user' AND password='$password'"));
         if (!$query) {
-             die("Errore nella query getCredential: " . mysqli_connect_error());
-            }
+            die("Errore nella query getCredential: " . mysqli_connect_error());
+        }
         if (mysqli_num_rows($query) > 0) {
             return true;
-        }      
+        }
     }
-    //
-    public function newOperation($value){
-        
+
+    //metodo che esegue la query per l'inserimento di una nuova operazione,
+    //Se l'inserimento va a buon fine ritorna true.
+    public function newOperation($value) {
+        $cliente = $value['cod_cliente'];
+        $articolo = $value['cod_articolo'];
+        $num = $value['num_art'];
+        $manodopera = $value['cod_man'];
+        global $connection;
+        $qntCorrente = mysqli_fetch_array(mysqli_query($connection, "SELECT quantita FROM articoli WHERE codice='$articolo'"));
+        $ret = "Quantità non valida";
+        if ($num <= $qntCorrente['quantita']) {
+            if ($articolo!="null" && $manodopera=="null") {
+                $prezzo = mysqli_fetch_array(mysqli_query($connection, "SELECT prezzo_vendita FROM articoli WHERE codice='$articolo'"));
+                $costo = $prezzo['prezzo_vendita'] * $num;
+                $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_articolo, costo, quantita)
+                   values('$cliente', '$articolo', '$costo', '$num')");
+                //aggiono la quantità in magazzino
+                $newQnt = $qntCorrente['quantita'] - $num;
+                mysqli_query($connection, "UPDATE articoli SET quantita='$newQnt' WHERE codice='$articolo'");
+                $ret = $query;
+            } else if ($articolo=="null" && $manodopera!="null") {
+                $prezzo = mysqli_fetch_array(mysqli_query($connection, "SELECT costo FROM manodopera WHERE id_manodopera='$manodopera'"));
+                $costo = $prezzo["costo"];
+                $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_manodopera, costo, quantita)
+                   values('$cliente', '$manodopera', '$costo', '$num')");
+                $ret = $query;
+            } else if ($articolo != "null" && $manodopera != "null") {
+                $prezzoArt = mysqli_fetch_array(mysqli_query($connection, "SELECT prezzo_vendita FROM articoli WHERE codice='$articolo'"));
+                $costoArt = $prezzoArt['prezzo_vendita'] * $num;
+                $prezzoMan = mysqli_fetch_array(mysqli_query($connection, "SELECT costo FROM manodopera WHERE id_manodopera='$manodopera'"));
+                $costoMan = $prezzoMan["costo"];
+                $costoTot = $costoArt + $costoMan;
+                $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_articolo, costo, quantita, id_manodopera)
+                   values('$cliente', '$articolo', '$costoTot', '$num', '$manodopera')");
+                //aggiono la quantità in magazzino
+                $newQnt = $qntCorrente['quantita'] - $num;
+                mysqli_query($connection, "UPDATE articoli SET quantita='$newQnt' WHERE codice='$articolo'");
+                $ret = $query;
+            }
+        }
+        return $ret;
     }
-    
-//metodo che esegue la query per l'inserimento di un nuovo cliente nella
-//tabella clienti del database. Se l'inserimento va a buon fine ritorna
-//true altrimenti un messaggio di errore
+    //metodo che esegue la query che restituisce le operazioni. 
+      public function getOperation() {
+        $ret = "...NON CI SONO OPERAZIONI IN CORSO...";
+        global $connection;
+        $query = mysqli_query($connection, ("SELECT * FROM operazioni"));
+        if (!$query) {
+            die("Errore nella query getOperation: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        }
+        return $ret;
+    }
+    //metodo che esegue la query per l'inserimento di un nuovo cliente nella
+    //tabella clienti del database. Se l'inserimento va a buon fine ritorna
+    //true altrimenti un messaggio di errore
     public function newClient($value) {
         $cf = $value['cf'];
         $nome = $value['nome'];

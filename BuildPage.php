@@ -138,43 +138,78 @@ class BuildPage {
     // manodopera. Tali dati vengono passati al metodo per mezzo di un'opportuna 
     //query fatta al database.
     public function addOperationForm($data) {
-        //genero il menu per i clienti
         $tmp = $data['clienti'];
-        $clienti = "<select id=select name=codCliente><option value=null>---</option>";
-        foreach ($tmp as $value) {
-            $clienti = $clienti . "<option value=" . $value['cf'] . ">" . $value['cf'] . "</option>";
+        //controllo se sono stati registrati clienti
+        if (is_string($tmp)) {
+            $ret = "<p>Non ci sono clienti, non è possibile aggiungere alcuna Operazione! <br>"
+                    . "<input type='button' onclick= addClient() value='Aggiungi Cliente'>";
+        } else {
+            //genero il menu per i clienti
+            $clienti = "<select id=select name=codCliente><option value=null>---</option>";
+            foreach ($tmp as $value) {
+                $clienti = $clienti . "<option value=" . $value['cf'] . ">" . $value['cf'] . "</option>";
+            }
+            $clienti = $clienti . "</select>";
+            //genero il menu per gli articoli
+            $tmp = $data['articoli'];
+            $articoli = "<select id=select name=codArticolo><option value=null>---</option>";
+            foreach ($tmp as $value) {
+                $articoli = $articoli . "<option value=" . $value['codice'] . ">" . $value['codice'] . "</option>";
+            }
+            $articoli = $articoli . "</select>";
+            //creo il menu per la quantita
+            $quantita = "<select id=select name=numArt><option value=1>1</option>";
+            for ($i = 2; $i < 10; $i++) {
+                $quantita = $quantita . "<option value=" . $i . ">" . $i . "</option>";
+            }
+            $quantita = $quantita . "</select>";
+            //creo il menu per la manodopera
+            $tmp = $data['manodopera'];
+            $manodopera = "<select id=select name=codMan><option value=null>---</option>";
+            foreach ($tmp as $value) {
+                $manodopera = $manodopera . "<option value=" . $value['id_manodopera'] . ">" . $value['id_manodopera'] . "</option>";
+            }
+            $manodopera = $manodopera . "</select>";
+            //collego i campi del form con i menu creati
+            $str = "<center><form name='addOperation'><table border=0><tr>";
+            $str = $str . "<td align=left>*Scegli Cliente</td><td>$clienti</td></tr>
+            <td align=left>*Scegli Articolo</td><td>$articoli</td></tr>
+            <td align=left>*Scegli Quantit&#224</td><td>$quantita</td></tr>
+            <td align=left>*Tipo Prestazione</td><td>$manodopera</td></tr>
+            <tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddOperationJson() value='Salva'></td></tr>
+            </form></table><p>* Campi Obbligatori</p></center>";
+            $ret = $str;
         }
-        $clienti = $clienti . "</select>";
-        //genero il menu per gli articoli
-        $tmp = $data['articoli'];
-        $articoli = "<select id=select name=codArticolo><option value=null>---</option>";
-        foreach ($tmp as $value) {
-            $articoli = $articoli . "<option value=" . $value['codice'] . ">" . $value['codice'] . "</option>";
+        return $ret;    
+    }
+    //metodo responsabile della generazione della tabella delle operazioni,i dati 
+    //passati in input provengono da una query fatta al database, se questa non
+    // produce nessun risultato ciò verrà notificato come risultato.
+    function makeOperationTable($result) {
+        $ret = $result;
+        if (!is_string($ret)) {
+            $ret = "<table>
+            <tr>
+            <th></th>
+            <th>Id Operazione</th> 
+            <th>Id Cliente</th>
+            <th>Id Articolo</th>
+            <th>Prestazione</th>
+            <th>Quantit&#224</th>
+            <th>Prezzo</th>           
+            </tr>";
+            for ($i = 0; $i < sizeof($result); $i++) {
+                $ret = $ret . "<tr><td id=" . $result[$i]['id_operazione'] . "><input type='checkbox'>
+                </td><td>" . $result[$i]['id_operazione'] .
+                        "</td><td>" . $result[$i]['id_cliente'] .
+                        "</td><td>" . $result[$i]['id_articolo'] .
+                        "</td><td>" . $result[$i]['id_manodopera'] .
+                        "</td><td>" . $result[$i]['quantita'] .
+                        "</td><td>" . $result[$i]['costo'] .
+                        "</td></tr>";
+            }
+            $ret = $ret . "</tbody></table>";
         }
-        $articoli = $articoli . "</select>";
-        //creo il menu per la quantita
-        $quantita = "<select id=select name=numArt><option value=1>1</option>";
-        for ($i = 2; $i < 10; $i++) {
-            $quantita = $quantita . "<option value=" . $i . ">" . $i . "</option>";
-        }
-        $quantita = $quantita . "</select>";
-        //creo il menu per la manodopera
-        $tmp = $data['manodopera'];
-        $manodopera = "<select id=select name=codMan><option value=null>---</option>";
-        foreach ($tmp as $value) {
-            $manodopera = $manodopera . "<option value=" . $value['id_manodopera'] . ">" . $value['id_manodopera'] . "</option>";
-        }
-        $manodopera = $manodopera . "</select>";
-        //collego i campi del form con i menu creati
-        $str = "<center><form name='addOperation'><table border=0><tr>";
-        $str = $str . "<td align=left>*Scegli Cliente</td><td>$clienti</td></tr>
-        <td align=left>*Scegli Articolo</td><td>$articoli</td></tr>
-        <td align=left>*Scegli Quantit&#224</td><td>$quantita</td></tr>
-        <td align=left>*Tipo Prestazione</td><td>$manodopera</td></tr>
-        <tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddOperationJson() value='Salva'></td></tr>
-        </form></table><p>* Campi Obbligatori</p></center>";
-        $ret = $str;
         return $ret;
     }
-
 }

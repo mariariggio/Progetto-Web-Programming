@@ -42,8 +42,19 @@ class FrameWork {
         $arr['articoli'] = $this->db->getArticle();
         return $this->bp->AddOperationForm($arr);
     }
+    //Metodo che si occupa dell'inserimento di una nuova operazione. Chiama un 
+    //metodo della classe UdeDb e se il risultato è positivo ritorna la tabella 
+    //con i clienti.
     private function addOperation($request){
-        
+        $messagge = $this->db->newOperation($request);
+        if(is_bool($messagge)){
+            echo $this->getOperations();
+        }
+    }
+     //Ritorna la tabella con i clienti
+    private function getOperations(){
+        $res = $this->db->getoperation();
+        return ($this->bp->makeOperationTable($res));
     }
     //Metodo che si occupa dell'inserimento di un nuovo cliente. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
