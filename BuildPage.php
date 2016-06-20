@@ -120,7 +120,7 @@ class BuildPage {
             <tr><td>*Quantit&#224</td><td><input type='text' name='quantita'></td></tr>
             <tr><td>*Prezzo Acquisto</td><td><input type='text' name='prezAcquisto'></td></tr>
             <tr><td>*Prezzo Vendita</td><td><input type='text' name='prezVendita'></td></tr>";
-            $cod = "<select name=cod_forn><option value=null> --- </option>";
+            $cod = "<select name=codForn><option value=null> --- </option>";
             foreach ($supplier as $value) {
                 $cod = $cod . "<option value=" . $value['piva'] . ">" . $value['piva'] . "</option>";
             }
