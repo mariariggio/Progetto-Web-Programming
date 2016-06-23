@@ -20,41 +20,46 @@ class FrameWork {
     public function fromAjax($post){
         $request = json_decode($_POST['operation'], true);
         if($request['operation']== "showAddOperationForm"){
-            echo $this->getAddOperationForm();
+            return $this->getAddOperationForm();
         }else if($request['operation']== "addOperation"){
-            echo $this->addOperation($request);
+            return $this->addOperation($request);
         }else if($request['operation']== "addClient"){
-            echo $this->addClient($request);
+            return $this->addClient($request);
         }else if ($request['operation']== "showAddArticleForm"){
-            echo $this->addArticleForm();
+            return $this->addArticleForm();
         }elseif ($request['operation']== "addArticle") {
-            echo $this->addArticle($request);
+            return $this->addArticle($request);
         } else if ($request['operation']== "addSupplier"){
-            echo $this->addSupplier($request);
+            return $this->addSupplier($request);
         } 
     }
     //Metodo che si occupa dell'inserimento di una nuova operazione. Chiama un 
     //metodo della classe UdeDb 
     private function getAddOperationForm(){
+        $result['operation'] = "addOperationForm";
         //Raccolgo i dati necessari
-        $arr['clienti'] =  $this->db->getClient();
-        $arr['manodopera'] = $this->db->getManodopera();
-        $arr['articoli'] = $this->db->getArticle();
-        return $this->bp->AddOperationForm($arr);
+        $result['clienti'] =  $this->db->getClient();
+        $result['manodopera'] = $this->db->getManodopera();
+        $result['articoli'] = $this->db->getArticle();
+        $ret = json_encode($result);
+        return $ret;
     }
     //Metodo che si occupa dell'inserimento di una nuova operazione. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la tabella 
     //con i clienti.
     private function addOperation($request){
         $messagge = $this->db->newOperation($request);
-        if(is_bool($messagge)){
-            echo $this->getOperations();
+        if(!is_string($messagge)){
+            $result['operation'] = "addOperation";
+            $result['value'] = $this->db->getOperation();
+            $ret = json_encode($result);
+            return $ret;
         }
     }
-     //Ritorna la tabella con i clienti
+    //Ritorna la tabella con i clienti
     private function getOperations(){
         $res = $this->db->getoperation();
-        return ($this->bp->makeOperationTable($res));
+        return $res;
     }
     //Metodo che si occupa dell'inserimento di un nuovo cliente. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
@@ -62,19 +67,25 @@ class FrameWork {
     private function addClient($request){
         $messagge = $this->db->newClient($request);
         if(is_bool($messagge)){
-            return $this->getClients();
+            $result['operation'] = "addClient";
+            $result['value'] = $this->getClients();
+            $ret = json_encode($result);
+            return $ret;
         }
     }
     //Ritorna la pagina con i clienti
     private function getClients(){
         $res = $this->db->getClient();
-        return ($this->bp->makeClientsTable($res));
+        return $res;
     }
     //metodo responsabile della creazione del form per l'inserimento di un 
     //nuovo articolo. Chiama un metodo della classe UseDb che restituisce la 
     //lista dei fornitori.
     private function addArticleForm(){
-        return $this->bp->addArticleForm($this->db->getSupplier());
+        $result['operation'] = "addArticleForm";
+        $result['value'] = $this->db->getSupplier();
+        $ret = json_encode($result);
+        return $ret;
     }
     //Metodo che si occupa dell'inserimento di un nuovo articolo. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
@@ -82,13 +93,16 @@ class FrameWork {
     private function addArticle($request){
         $messagge = $this->db->newArticle($request);
         if(is_bool($messagge)){
-            return $this->getArticles();
+            $result['operation'] = "addArticle";
+            $result['value'] = $this->getArticles();
+            $ret = json_encode($result);
+            return $ret;
         }
     }
     //Ritorna la pagina con gli articoli
     private function getArticles(){
         $res = $this->db->getArticle();
-        return ($this->bp->makeArticlesTable($res));
+        return $res;
     }
     //Metodo che si occupa dell'inserimento di un nuovo fornitore. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
@@ -96,13 +110,16 @@ class FrameWork {
     private function addSupplier($request){
         $messagge = $this->db->newSupplier($request);
         if(is_bool($messagge)){
-            return $this->getSupplier();
+            $result['operation'] = "addSupplier";
+            $result['value'] = $this->getSupplier();
+            $ret = json_encode($result);
+            return $ret;
         }
     }
     //Ritorna la pagina con i clienti
     private function getSupplier(){
         $res = $this->db->getSupplier();
-        return ($this->bp->makeSupplierTable($res));
+        return $res;
     }
 }
 

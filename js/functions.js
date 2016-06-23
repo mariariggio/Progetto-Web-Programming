@@ -196,14 +196,176 @@ function ajaxEvent(data) {
     }
     // Valuto lo stato della richiesta 
     self.xhttp.onreadystatechange = function () {
-         if (self.xhttp.readyState === 4 && self.xhttp.status === 200) {             
-            document.getElementById("post").innerHTML =self.xhttp.responseText;
+        if (self.xhttp.readyState === 4 && self.xhttp.status === 200) {
+            makeResponse(self.xhttp.responseText);
         }
-    };    
+    };
     //specifico il tipo di richiesta
     self.xhttp.open('POST', 'index.php', true);
     self.xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     //invio la richiesta al server
-    self.xhttp.send('operation=' + data);   
+    self.xhttp.send('operation=' + data);
+}
+function makeResponse(arr) {
+    var response = JSON.parse(arr);
+    if (response.operation === "addClient") {
+        makeClientsTable(response.value);
+    } else if (response.operation === "addSupplier"){
+        makeSupplierTable(response.value);
+    } else if (response.operation === "addArticleForm"){
+        addArticleForm(response.value);
+    } else if (response.operation === "addArticle"){
+        makeArticlesTable(response.value);
+    } else if (response.operation === "addOperationForm"){
+        addOperationForm(response.clienti, response.manodopera, response.articoli);
+    } else if(response.operation === "addOperation"){
+        makeOperationTable(response.value);
+    }
+}
+function makeClientsTable(response) {
+    out = "<table width=100%>";
+    out += "<tr>";
+    out += "<th></th>";
+    out += "<th>Codice Fiscale</th>";
+    out += "<th>Nome</th>";
+    out += "<th>Cognome</th>";
+    out += "<th>Indirizzo</th>";
+    out += "<th>Cellulare</th>";
+    out += "<th>Citt&#224</th>";
+    out += "<th>Provincia</th></tr>";
+    for (i = 0; i < response.length; i++) {
+        out += "<tr><td id=" + response[i].cf + "><input type='checkbox'></td><td>" + response[i].cf +
+                "</td><td>" + response[i].nome + "</td><td>" + response[i].cognome +
+                "</td><td>" + response[i].indirizzo + "</td><td>" + response[i].cellulare +
+                "</td><td>" + response[i]['citta'] + "</td><td>" + response[i].provincia + "</td></tr>";
+    }
+    out += "</table>";
+    $("#post").html(out);
 }
 
+ function addArticleForm(supplier) {
+     out = "<center><form name='addArticle'><table border=0px>";
+     out += "<tr><td>*Codice</td><td><input type='text' name='codArticolo'></td></tr>";
+     out += "<tr><td>*Categoria</td><td><input type='text' name='categoria'></td></tr>"; 
+     out += "<tr><td>*Descrizione</td><td><input type='text' name='descrizione'></td></tr>";
+     out += "<tr><td>*Quantit&#224</td><td><input type='text' name='quantita'></td></tr>";
+     out += "<tr><td>*Prezzo Acquisto</td><td><input type='text' name='prezAcquisto'></td></tr>";
+     out += "<tr><td>*Prezzo Vendita</td><td><input type='text' name='prezVendita'></td></tr>";
+     cod = "<select name=codForn><option value=null> --- </option>";
+     for (i = 0; i < supplier.length; i++) {
+         cod += "<option value=" + supplier[i].piva +  ">" + supplier[i].piva + "</option>";
+     }
+     cod += "</select>";
+     out += "<tr><td>Cod. Fornitore</td><td>" + cod +
+             "<tr><td colspan=2 style=text-align:center><br><input type='button' onclick=makeAddArticleJson() value='Salva'></td>" +
+             "</tr></table></form><p>* Campi Obbligatori</p></center>";
+     $("#post").html(out);
+    } 
+    function makeArticlesTable(response) {
+            out = "<table width=100%>";
+            out += "<tr>";
+            out += "<th></th>";
+            out += "<th>Codice Articolo</th>";
+            out += "<th>Categoria</th>";
+            out += "<th>Descrizione</th>";
+            out += "<th>Quantit&#224</th>";
+            out += "<th>Prezzo Acquisto</th>";
+            out += "<th>Prezzo Vendita</th>";
+            out += "<th>Codice Fornitore</th></tr>";           
+            for (i = 0; i < response.length; i++) {
+                out += "<tr><td id=" + response[i].codice + "><input type='checkbox'></td><td>" + 
+                       response[i].codice + "</td><td>" + response[i].categoria + "</td><td>" +
+                       response[i].descr +  "</td><td>" + response[i].quantita + "</td><td>" + 
+                       response[i].prezzo_acquisto + "</td><td>" + response[i].prezzo_vendita + 
+                       "</td><td>" + response[i].cod_fornitore + "</td></tr>";
+            }
+            out += "</table>";
+            $("#post").html(out);
+    }
+ 
+
+//metodo responsabile della generazione della tabella dei fornitori, i dati 
+    //provengono da una query fatta al database, se questa non produce nessun 
+    //risultato ci� verr� notificato come risultato.
+    function makeSupplierTable(response) {
+        out = "<table width=100%>";
+        out +="<tr>";
+        out += "<th></th>";
+        out += "<th>P. Iva</th>";
+        out += "<th>Ragione Sociale</th>";
+        out += "<th>Cellulare</th>";
+        out += "<th>Indirizzo</th>";
+        out += "<th>Citt&#224</th>";
+        out += "<th>Provincia</th></tr>";
+        for (i = 0; i < response.length; i++) {
+            out +="<tr><td id=" + response[i].piva + "><input type='checkbox'></td><td>" +
+                    response[i].piva + "</td><td>" + response[i].ragione_sociale + 
+                    "</td><td>" + response[i].cellulare + "</td><td>" + response[i].indirizzo + 
+                    "</td><td>" + response[i].citta + "</td><td>" + response[i].provincia + "</td></tr>";
+            }
+        out += "</table>";
+        $("#post").html(out);
+    }
+    function addOperationForm(clienti, manodopera, articoli) {
+            //genero il menu per i clienti
+            client = "<select id=select name=codCliente><option value=null>---</option>";
+            for (i = 0; i < clienti.length; i++) {
+                client += "<option value=" + clienti[i].cf +  ">" + clienti[i].cf + "</option>";
+            }
+            client += "</select>";
+            //genero il menu per gli articoli
+            
+            art = "<select id=select name=codArticolo><option value=null>---</option>";
+            for (i = 0; i < articoli.length; i++) {
+                art += "<option value=" + articoli[i].codice +  ">" + articoli[i].codice + "</option>";
+            }
+            art += "</select>";
+            //creo il menu per la quantita
+            quantita = "<select id=select name=numArt><option value=1>1</option>";
+            for (i = 2; i <= 10; i++) {
+                quantita += "<option value=" + i + ">" + i + "</option>";
+            }
+            quantita += "</select>";
+            //creo il menu per la manodopera
+          
+            man = "<select id=select name=codMan><option value=null>---</option>";
+            for (i = 0; i < manodopera.length; i++) {
+                man += "<option value=" + manodopera[i].id_manodopera + ">" + manodopera[i].id_manodopera + "</option>";
+            }
+            man += "</select>";
+            //collego i campi del form con i menu creati
+            out = "<center><form name='addOperation'><table border=0><tr>";
+            out += "<td align=left>*Scegli Cliente</td><td>" + client + "</td></tr>";
+            out += "<td align=left>*Scegli Articolo</td><td>" + art + "</td></tr>";
+            out += "<td align=left>*Scegli Quantit&#224</td><td>" + quantita + "</td></tr>";
+            out += "<td align=left>*Tipo Prestazione</td><td>" + man + "</td></tr>";
+            out += "<tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddOperationJson() value='Salva'></td></tr>";  
+            out += "</table></form><p>* Campi Obbligatori</p></center>";
+        $("#post").html(out);
+    }
+    //metodo responsabile della generazione della tabella delle operazioni,i dati 
+    //passati in input provengono da una query fatta al database, se questa non
+    // produce nessun risultato ci� verr� notificato come risultato.
+    function makeOperationTable(response) {
+        $("#post").html("out");
+            out = "<table width=100%>";
+            out += "<tr>";
+            out += "<th></th>";
+            out += "<th>Id Operazione</th>";
+            out += "<th>Id Cliente</th>";
+            out += "<th>Id Articolo</th>";
+            out += "<th>Prestazione</th>";
+            out += "<th>Quantit&#224</th>";
+            out += "<th>Prezzo</th></tr>";           
+            for (i = 0; i < response.length; i++) {
+                out += "<tr><td id=" + response[i].id_operazione + "><input type='checkbox'></td><td>" + 
+                        response[i].id_operazione + "</td><td>" +
+                        response[i].id_cliente + "</td><td>" +
+                        response[i].id_articolo + "</td><td>" + 
+                        response[i].id_manodopera + "</td><td>" +
+                        response[i].quantita + "</td><td>" + 
+                        response[i].costo + "</td></tr>";
+            }
+            out += "</table>";
+            $("#post").html(out);
+    }
