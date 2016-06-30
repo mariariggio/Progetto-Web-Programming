@@ -17,7 +17,7 @@ if (isset($_POST['nome']) && isset($_POST['password'])) {
         include 'index_error.html';
     }
 } else if (isset($_POST['operation'])) {
-    $fw->fromAjax($_POST);
+   echo $fw->fromAjax($_POST);
 }
 unset($_POST);
 ?>

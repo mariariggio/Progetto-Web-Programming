@@ -35,36 +35,36 @@ class UseDb {
         global $connection;
         $qntCorrente = mysqli_fetch_array(mysqli_query($connection, "SELECT quantita FROM articoli WHERE codice='$articolo'"));
         $ret = "Quantità non valida";
-        if ($num <= $qntCorrente['quantita']) {
-            if ($articolo!="null" && $manodopera=="null") {
+        if ($articolo != "null" && $num <= $qntCorrente['quantita']) {
+            if ($manodopera=="null") {
                 $prezzo = mysqli_fetch_array(mysqli_query($connection, "SELECT prezzo_vendita FROM articoli WHERE codice='$articolo'"));
                 $costo = $prezzo['prezzo_vendita'] * $num;
                 $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_articolo, costo, quantita)
-                   values('$cliente', '$articolo', '$costo', '$num')");
+                         values('$cliente', '$articolo', '$costo', '$num')");
                 //aggiono la quantità in magazzino
                 $newQnt = $qntCorrente['quantita'] - $num;
                 mysqli_query($connection, "UPDATE articoli SET quantita='$newQnt' WHERE codice='$articolo'");
                 $ret = $query;
-            } else if ($articolo=="null" && $manodopera!="null") {
-                $prezzo = mysqli_fetch_array(mysqli_query($connection, "SELECT costo FROM manodopera WHERE id_manodopera='$manodopera'"));
-                $costo = $prezzo["costo"];
-                $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_manodopera, costo, quantita)
-                   values('$cliente', '$manodopera', '$costo', '$num')");
-                $ret = $query;
-            } else if ($articolo != "null" && $manodopera != "null") {
+            }  else if ($manodopera != "null") {
                 $prezzoArt = mysqli_fetch_array(mysqli_query($connection, "SELECT prezzo_vendita FROM articoli WHERE codice='$articolo'"));
                 $costoArt = $prezzoArt['prezzo_vendita'] * $num;
                 $prezzoMan = mysqli_fetch_array(mysqli_query($connection, "SELECT costo FROM manodopera WHERE id_manodopera='$manodopera'"));
                 $costoMan = $prezzoMan["costo"];
                 $costoTot = $costoArt + $costoMan;
                 $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_articolo, costo, quantita, id_manodopera)
-                   values('$cliente', '$articolo', '$costoTot', '$num', '$manodopera')");
+                         values('$cliente', '$articolo', '$costoTot', '$num', '$manodopera')");
                 //aggiono la quantità in magazzino
                 $newQnt = $qntCorrente['quantita'] - $num;
                 mysqli_query($connection, "UPDATE articoli SET quantita='$newQnt' WHERE codice='$articolo'");
                 $ret = $query;
             }
-        }
+        }else if ($articolo=="null" && $manodopera!="null") {
+                $prezzo = mysqli_fetch_array(mysqli_query($connection, "SELECT costo FROM manodopera WHERE id_manodopera='$manodopera'"));
+                $costo = $prezzo["costo"];
+                $query = mysqli_query($connection, "INSERT INTO operazioni (id_cliente, id_manodopera, costo, quantita)
+                   values('$cliente', '$manodopera', '$costo', '$num')");
+                $ret = $query;
+            }
         return $ret;
     }
     //metodo che esegue la query che restituisce le operazioni. 
@@ -103,7 +103,7 @@ class UseDb {
     //metodo che esegue la query che ritorna i clienti del database oppure un 
     //messaggio se la query non produce nessun risultato
     public function getClient() {
-        $ret = "...NON CI SONO CLIENTI...";
+        $ret = "NON CI SONO CLIENTI";
         global $connection;
         $query = mysqli_query($connection,("SELECT * FROM clienti"));
         if (!$query) {
@@ -136,7 +136,7 @@ class UseDb {
     //metodo che esegue la query che ritorna gli articoli del database oppure un 
     //messaggio se la query non produce nessun risultato
     public function getArticle() {
-        $ret = "...NON CI SONO ARTICOLI...";
+        $ret = "NON CI SONO ARTICOLI";
         global $connection;
         $query = mysqli_query($connection,("SELECT * FROM articoli"));
         if (!$query) {
@@ -168,7 +168,7 @@ class UseDb {
      //metodo che esegue la query che ritorna i fornitori del database oppure un 
     //messaggio se la query non produce nessun risultato
     public function getSupplier() {
-        $ret = "...NON CI SONO FORNITORI...";
+        $ret = "NON CI SONO FORNITORI";
         global $connection;
         $query = mysqli_query($connection, ("SELECT * FROM fornitori"));
         if (!$query) {

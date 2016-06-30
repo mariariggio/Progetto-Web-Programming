@@ -22,17 +22,25 @@ function showOperation() {
 }
 //funzione che crea il form per l'inserimento di un nuovo cliente
 function addClient() {
-    s = "<center><form name='addClient'><table border=0><tr>";
-    s += "<td align=left>*Codice Fiscale</td><td><input type=text name=cf size=30></td></tr>";
-    s += "<tr><td align=left>*Nome</td><td><input type=text name=nome size=30></td></tr>";
-    s += "<tr><td align=left>*Cognome</td><td><input type=text name=cognome size=30></td></tr>";
-    s += "<tr><td align=left>*Indirizzo, numero civico</td><td><input type=text name=indirizzo size=30></td></tr>";
-    s += "<tr><td align=left>*Cellulare</td><td><input type=text name=telefono size=30></td></tr>";
-    s += "<tr><td align=left>*Citt&#224</td><td><input type=text name=citta size=30></td></tr>";
-    s += "<tr><td align=left>*Provincia</td><td><select name=provincia><option value=null>---</option>";
+    s = "<form name='addClient'>";
+    s += "<div class='cell'>*Codice Fiscale</div><div class='cell' text-align=left><input type=text name=cf size=30></div>";
+    s += "<div class='row'></div>" ;
+    s +=  "<div class='cell'>*Nome </div><div class='cell' text-align=left><input type=text name=nome size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Cognome</div><div class='cell' text-align=left><input type=text name=cognome size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Indirizzo, numero civico</div><div class='cell' text-align=left><input type=text name=indirizzo size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Cellulare</div><div class='cell' text-align=left><input type=text name=telefono size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Citt&#224</div><div class='cell' text-align=left><input type=text name=citta size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Provincia</div><div class='cell' text-align=left><select name=provincia><option value=null>---</option>";
     s += "<option value=AG>AGRIGENTO</option><option value=AL>ALESSANDRIA</option><option value=AN>ANCONA</option><option value=AO>AOSTA</option><option value=AR>AREZZO</option><option value=AP>ASCOLI PICENO</option><option value=AT>ASTI</option><option value=AV>AVELLINO</option><option value=BA>BARI</option><option value=BL>BELLUNO</option><option value=BN>BENEVENTO</option><option value=BG>BERGAMO</option><option value=BI>BIELLA</option><option value=BO>BOLOGNA</option><option value=BZ>BOLZANO</option><option value=BS>BRESCIA</option><option value=BR>BRINDISI</option><option value=CA>CAGLIARI</option><option value=CL>CALTANISSETTA</option><option value=CB>CAMPOBASSO</option><option value=CE>CASERTA</option><option value=CT>CATANIA</option><option value=CZ>CATANZARO</option><option value=CH>CHIETI</option><option value=CO>COMO</option><option value=CS>COSENZA</option><option value=CR>CREMONA</option><option value=KR>CROTONE</option><option value=CN>CUNEO</option><option value=EN>ENNA</option><option value=FE>FERRARA</option><option value=FI>FIRENZE</option><option value=FG>FOGGIA</option><option value=FC>FORLI-CESENA</option><option value=FR>FROSINONE</option><option value=GE>GENOVA</option><option value=GO>GORIZIA</option><option value=GR>GROSSETO</option><option value=IM>IMPERIA</option><option value=IS>ISERNIA</option><option value=SP>LA SPEZIA</option><option value=AQ>AQUILA</option><option value=LT>LATINA</option><option value=LE>LECCE</option><option value=LC>LECCO</option><option value=LI>LIVORNO</option><option value=LO>LODI</option><option value=LU>LUCCA</option><option value=MC>MACERATA</option><option value=MN>MANTOVA</option><option value=MS>MASSA-CARRARA</option><option value=MT>MATERA</option><option value=ME>MESSINA</option><option value=MI>MILANO</option><option value=MO>MODENA</option><option value=NA>NAPOLI</option><option value=NO>NOVARA</option><option value=NU>NUORO</option><option value=OR>ORISTANO</option><option value=PD>PADOVA</option><option value=PA>PALERMO</option><option value=PR>PARMA</option><option value=PV>PAVIA</option><option value=PG>PERUGIA</option><option value=PU>PESARO E URBINO</option><option value=PE>PESCARA</option><option value=PC>PIACENZA</option><option value=PI>PISA</option><option value=PT>PISTOIA</option><option value=PN>PORDENONE</option><option value=PZ>POTENZA</option><option value=PO>PRATO</option><option value=RG>RAGUSA</option><option value=RA>RAVENNA</option><option value=RC>REGGIO DI CALABRIA</option><option value=RE>REGGIO NELL EMILIA</option><option value=RI>RIETI</option><option value=RN>RIMINI</option><option value=RM>ROMA</option><option value=RO>ROVIGO</option><option value=SA>SALERNO</option><option value=SS>SASSARI</option><option value=SV>SAVONA</option><option value=SI>SIENA</option><option value=SR>SIRACUSA</option><option value=SO>SONDRIO</option><option value=TA>TARANTO</option><option value=TE>TERAMO</option><option value=TR>TERNI</option><option value=TO>TORINO</option><option value=TP>TRAPANI</option><option value=TN>TRENTO</option><option value=TV>TREVISO</option><option value=TS>TRIESTE</option><option value=UD>UDINE</option><option value=VA>VARESE</option><option value=VE>VENEZIA</option><option value=VB>VERBANO-CUSIO-OSSOLA</option><option value=VC>VERCELLI</option><option value=VR>VERONA</option><option value=VV>VIBO VALENTIA</option><option value=VI>VICENZA</option><option value=VT>VITERBO</option></select>";
-    s += "<tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddClientJson() value=Registra></td></tr>";
-    s += "</table></form><p>* Campi Obbligatori</p></center>";
+    s += "</div><div class='row'></div>" ;
+    s += "<div class='button'><br><input type=button onclick=makeAddClientJson() value=Registra>";
+    s += "<br><p>* Campi Obbligatori</p></div>";
+    s += "<div class='row'></div></form>" ;
     $("#post").html(s);
 }
 function showClient() {
@@ -62,16 +70,23 @@ function showInvoice() {
 }
 //funzione che crea il form per l'insermento di un nuovo fornitore.
 function addSupplier() {
-    s = "<center><form name='addSupplier'><table border=0><tr>";
-    s += "<td align=left>*P.iva</td><td><input type=text name=pIva size=30></td></tr>";
-    s += "<tr><td align=left>*Ragione Sociale</td><td><input type=text name=ragSociale size=30></td></tr>";
-    s += "<tr><td align=left>*Cellulare</td><td><input type=text name=cellulare size=30></td></tr>";
-    s += "<tr><td align=left>*Indirizzo</td><td><input type=text name=indirizzo size=30></td></tr>";
-    s += "<tr><td align=left>*Citt&#224</td><td><input type=text name=citta size=30></td></tr>";
-    s += "<tr><td align=left>*Provincia</td><td><select name=provincia><option value=null>---</option>";
+    s = "<form name='addSupplier'>";
+    s += "<div class='cell'>*P.iva</div><div class='cell'><input type=text name=pIva size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Ragione Sociale</div><div class='cell'><input type=text name=ragSociale size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Cellulare</div><div class='cell'><input type=text name=cellulare size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Indirizzo</div><div class='cell'><input type=text name=indirizzo size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Citt&#224</div><div class='cell'><input type=text name=citta size=30></div>";
+    s += "<div class='row'></div>" ;
+    s += "<div class='cell'>*Provincia</div><div class='cell'><select name=provincia><option value=null>---</option>";
     s += "<option value=AG>AGRIGENTO</option><option value=AL>ALESSANDRIA</option><option value=AN>ANCONA</option><option value=AO>AOSTA</option><option value=AR>AREZZO</option><option value=AP>ASCOLI PICENO</option><option value=AT>ASTI</option><option value=AV>AVELLINO</option><option value=BA>BARI</option><option value=BL>BELLUNO</option><option value=BN>BENEVENTO</option><option value=BG>BERGAMO</option><option value=BI>BIELLA</option><option value=BO>BOLOGNA</option><option value=BZ>BOLZANO</option><option value=BS>BRESCIA</option><option value=BR>BRINDISI</option><option value=CA>CAGLIARI</option><option value=CL>CALTANISSETTA</option><option value=CB>CAMPOBASSO</option><option value=CE>CASERTA</option><option value=CT>CATANIA</option><option value=CZ>CATANZARO</option><option value=CH>CHIETI</option><option value=CO>COMO</option><option value=CS>COSENZA</option><option value=CR>CREMONA</option><option value=KR>CROTONE</option><option value=CN>CUNEO</option><option value=EN>ENNA</option><option value=FE>FERRARA</option><option value=FI>FIRENZE</option><option value=FG>FOGGIA</option><option value=FC>FORLI-CESENA</option><option value=FR>FROSINONE</option><option value=GE>GENOVA</option><option value=GO>GORIZIA</option><option value=GR>GROSSETO</option><option value=IM>IMPERIA</option><option value=IS>ISERNIA</option><option value=SP>LA SPEZIA</option><option value=AQ>AQUILA</option><option value=LT>LATINA</option><option value=LE>LECCE</option><option value=LC>LECCO</option><option value=LI>LIVORNO</option><option value=LO>LODI</option><option value=LU>LUCCA</option><option value=MC>MACERATA</option><option value=MN>MANTOVA</option><option value=MS>MASSA-CARRARA</option><option value=MT>MATERA</option><option value=ME>MESSINA</option><option value=MI>MILANO</option><option value=MO>MODENA</option><option value=NA>NAPOLI</option><option value=NO>NOVARA</option><option value=NU>NUORO</option><option value=OR>ORISTANO</option><option value=PD>PADOVA</option><option value=PA>PALERMO</option><option value=PR>PARMA</option><option value=PV>PAVIA</option><option value=PG>PERUGIA</option><option value=PU>PESARO E URBINO</option><option value=PE>PESCARA</option><option value=PC>PIACENZA</option><option value=PI>PISA</option><option value=PT>PISTOIA</option><option value=PN>PORDENONE</option><option value=PZ>POTENZA</option><option value=PO>PRATO</option><option value=RG>RAGUSA</option><option value=RA>RAVENNA</option><option value=RC>REGGIO DI CALABRIA</option><option value=RE>REGGIO NELL EMILIA</option><option value=RI>RIETI</option><option value=RN>RIMINI</option><option value=RM>ROMA</option><option value=RO>ROVIGO</option><option value=SA>SALERNO</option><option value=SS>SASSARI</option><option value=SV>SAVONA</option><option value=SI>SIENA</option><option value=SR>SIRACUSA</option><option value=SO>SONDRIO</option><option value=TA>TARANTO</option><option value=TE>TERAMO</option><option value=TR>TERNI</option><option value=TO>TORINO</option><option value=TP>TRAPANI</option><option value=TN>TRENTO</option><option value=TV>TREVISO</option><option value=TS>TRIESTE</option><option value=UD>UDINE</option><option value=VA>VARESE</option><option value=VE>VENEZIA</option><option value=VB>VERBANO-CUSIO-OSSOLA</option><option value=VC>VERCELLI</option><option value=VR>VERONA</option><option value=VV>VIBO VALENTIA</option><option value=VI>VICENZA</option><option value=VT>VITERBO</option></select>";
-    s += "<tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddSuppJson() value=Salva></td></tr>";
-    s += "</table></form><p>* Campi Obbligatori</p></center>";
+    s += "</div><div class='row'></div>" ;
+    s += "<div class='button'><br><input type=button onclick=makeAddSuppJson() value=Salva>";
+    s += "<p>* Campi Obbligatori</p></div>";
+    s += "<div class='row'></div></form>" ;
     $("#post").html(s);
 }
 function showSupplier() {
@@ -165,7 +180,7 @@ function makeAddSuppJson() {
     var x = document.forms['addSupplier'];
     //Controllo se tutti i campi sono stati compilati
     if (x.pIva.value === "" || x.ragSociale.value === "" || x.cellulare.value === ""
-        || x.indirizzo.value === "" || x.citta.value === "" || x.provincia.value === "") {
+            || x.indirizzo.value === "" || x.citta.value === "" || x.provincia.value === "") {
         alert("Non sono stati riempiti tutti i campi");
     } else {
         //Creo l'oggetto Json
@@ -220,104 +235,131 @@ function makeResponse(arr) {
         addOperationForm(response.clienti, response.manodopera, response.articoli);
     } else if(response.operation === "addOperation"){
         makeOperationTable(response.value);
-    }
+    } 
 }
 function makeClientsTable(response) {
-    out = "<table width=100%>";
-    out += "<tr>";
-    out += "<th></th>";
-    out += "<th>Codice Fiscale</th>";
-    out += "<th>Nome</th>";
-    out += "<th>Cognome</th>";
-    out += "<th>Indirizzo</th>";
-    out += "<th>Cellulare</th>";
-    out += "<th>Citt&#224</th>";
-    out += "<th>Provincia</th></tr>";
+    out = "<div class='out'></div>";
+    out += "<div class='out'><h>Codice Fiscale</h></div>";
+    out += "<div class='out'><h>Nome</h></div>";
+    out += "<div class='out'><h>Cognome</h></div>";
+    out += "<div class='out'><h>Indirizzo</h></div>";
+    out += "<div class='out'><h>Cellulare</h></div>";
+    out += "<div class='out'><h>Citt&#224</h></div>";
+    out += "<div class='out'><h>Provincia</h></div>";
+    out += "<div class='row'></div>";
     for (i = 0; i < response.length; i++) {
-        out += "<tr><td id=" + response[i].cf + "><input type='checkbox'></td><td>" + response[i].cf +
-                "</td><td>" + response[i].nome + "</td><td>" + response[i].cognome +
-                "</td><td>" + response[i].indirizzo + "</td><td>" + response[i].cellulare +
-                "</td><td>" + response[i]['citta'] + "</td><td>" + response[i].provincia + "</td></tr>";
+        out += "<div class='out' id=" + response[i].cf + "><input type='checkbox'></div>" + 
+                "<div class='out'>" + response[i].cf + "</div>" +
+                "<div class='out'>" + response[i].nome + "</div>" +
+                "<div class='out'>" + response[i].cognome + "</div>" +
+                "<div class='out'>" + response[i].indirizzo + "</div>" + 
+                "<div class='out'>" + response[i].cellulare + "</div>" +
+                "<div class='out'>" + response[i].citta + "</div>" + 
+                "<div class='out'>" + response[i].provincia+ "</div>" +
+                "<div class='row'></div>";
     }
-    out += "</table>";
+    //out += "</table>";
     $("#post").html(out);
 }
 
  function addArticleForm(supplier) {
-     out = "<center><form name='addArticle'><table border=0px>";
-     out += "<tr><td>*Codice</td><td><input type='text' name='codArticolo'></td></tr>";
-     out += "<tr><td>*Categoria</td><td><input type='text' name='categoria'></td></tr>"; 
-     out += "<tr><td>*Descrizione</td><td><input type='text' name='descrizione'></td></tr>";
-     out += "<tr><td>*Quantit&#224</td><td><input type='text' name='quantita'></td></tr>";
-     out += "<tr><td>*Prezzo Acquisto</td><td><input type='text' name='prezAcquisto'></td></tr>";
-     out += "<tr><td>*Prezzo Vendita</td><td><input type='text' name='prezVendita'></td></tr>";
+     //Controllo se sono stati registrati fornitori.
+     if(supplier === "NON CI SONO FORNITORI"){
+         out = "<p>Non ci sono fornitori, non &#232 possibile aggiungere alcun Articolo! <br>" +
+                "<br><input type='button' onclick= addSupplier() value='Aggiungi Fornitore'>";
+     } else {
+     out = "<form name='addArticle'>";
+     out += "<div class='cell'>*Codice</div><div class='cell'><input type='text' name='codArticolo' size=30></div>";
+     out += "<div class='row'></div>";
+     out += "<div class='cell'>*Categoria</div><div class='cell'><input type='text' name='categoria' size=30></div>";
+     out += "<div class='row'></div>";
+     out += "<div class='cell'>*Descrizione</div><div class='cell'><input type='text' name='descrizione' size=30></div>";
+     out += "<div class='row'></div>";
+     out += "<div class='cell'>*Quantit&#224</div><div class='cell'><input type='text' name='quantita' size=30></div>";
+     out += "<div class='row'></div>";
+     out += "<div class='cell'>*Prezzo Acquisto</div><div class='cell'><input type='text' name='prezAcquisto' size=30></div>";
+     out += "<div class='row'></div>";
+     out += "<div class='cell'>*Prezzo Vendita</div><div class='cell'><input type='text' name='prezVendita' size=30></div>";
+     out += "<div class='row'></div>";
      cod = "<select name=codForn><option value=null> --- </option>";
      for (i = 0; i < supplier.length; i++) {
          cod += "<option value=" + supplier[i].piva +  ">" + supplier[i].piva + "</option>";
      }
      cod += "</select>";
-     out += "<tr><td>Cod. Fornitore</td><td>" + cod +
-             "<tr><td colspan=2 style=text-align:center><br><input type='button' onclick=makeAddArticleJson() value='Salva'></td>" +
-             "</tr></table></form><p>* Campi Obbligatori</p></center>";
-     $("#post").html(out);
+     out += "<div class='cell'>Cod. Fornitore</div><div class='cell'>" + cod + "</div>";
+     out += "<div class='row'></div>";
+     out += "<div class='button'><br><input type='button' onclick=makeAddArticleJson() value='Salva'>";
+     out += "<p>* Campi Obbligatori</p></div>";
+     out += "<div class='row'></div></form>";
     } 
+     $("#post").html(out);
+ }
     function makeArticlesTable(response) {
-            out = "<table width=100%>";
-            out += "<tr>";
-            out += "<th></th>";
-            out += "<th>Codice Articolo</th>";
-            out += "<th>Categoria</th>";
-            out += "<th>Descrizione</th>";
-            out += "<th>Quantit&#224</th>";
-            out += "<th>Prezzo Acquisto</th>";
-            out += "<th>Prezzo Vendita</th>";
-            out += "<th>Codice Fornitore</th></tr>";           
+            out = "<div class='out'></div>";
+            out += "<div class='out'>Codice Articolo</div>";
+            out += "<div class='out'>Categoria</div>";
+            out += "<div class='out'>Descrizione</div>";
+            out += "<div class='out'>Quantit&#224</div>";
+            out += "<div class='out'>Prezzo Acquisto</div>";
+            out += "<div class='out'>Prezzo Vendita</div>";
+            out += "<div class='out'>Codice Fornitore</div>";         
+            out += "<div class='row'></div>";
             for (i = 0; i < response.length; i++) {
-                out += "<tr><td id=" + response[i].codice + "><input type='checkbox'></td><td>" + 
-                       response[i].codice + "</td><td>" + response[i].categoria + "</td><td>" +
-                       response[i].descr +  "</td><td>" + response[i].quantita + "</td><td>" + 
-                       response[i].prezzo_acquisto + "</td><td>" + response[i].prezzo_vendita + 
-                       "</td><td>" + response[i].cod_fornitore + "</td></tr>";
+                out += "<div class='out' id=" + response[i].codice + "><input type='checkbox'></div>" + 
+                       "<div class='out'>" + response[i].codice + "</div>" + 
+                       "<div class='out'>" + response[i].categoria + "</div>" +
+                       "<div class='out'>" + response[i].descr +  "</div>" + 
+                       "<div class='out'>" + response[i].quantita + "</div>" + 
+                       "<div class='out'>" + response[i].prezzo_acquisto + "</div>" + 
+                       "<div class='out'>" + response[i].prezzo_vendita + "</div>" + 
+                       "<div class='out'>" + response[i].cod_fornitore + "</div>" + 
+                       "<div class='row'></div>";
             }
-            out += "</table>";
             $("#post").html(out);
     }
  
 
 //metodo responsabile della generazione della tabella dei fornitori, i dati 
     //provengono da una query fatta al database, se questa non produce nessun 
-    //risultato ciï¿½ verrï¿½ notificato come risultato.
+    //risultato ciò verrà notificato come risultato.
     function makeSupplierTable(response) {
-        out = "<table width=100%>";
-        out +="<tr>";
-        out += "<th></th>";
-        out += "<th>P. Iva</th>";
-        out += "<th>Ragione Sociale</th>";
-        out += "<th>Cellulare</th>";
-        out += "<th>Indirizzo</th>";
-        out += "<th>Citt&#224</th>";
-        out += "<th>Provincia</th></tr>";
+        out = "<div class='out'></div>";
+        out += "<div class='out'>P. Iva</div>";
+        out += "<div class='out'>Ragione Sociale</div>";
+        out += "<div class='out'>Cellulare</div>";
+        out += "<div class='out'>Indirizzo</div>";
+        out += "<div class='out'>Citt&#224</div>";
+        out += "<div class='out'>Provincia</div>";
+        out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
-            out +="<tr><td id=" + response[i].piva + "><input type='checkbox'></td><td>" +
-                    response[i].piva + "</td><td>" + response[i].ragione_sociale + 
-                    "</td><td>" + response[i].cellulare + "</td><td>" + response[i].indirizzo + 
-                    "</td><td>" + response[i].citta + "</td><td>" + response[i].provincia + "</td></tr>";
-            }
-        out += "</table>";
+            out +="<div class='out' id=" + response[i].piva + "><input type='checkbox'></div>" +
+                    "<div class='out'>" + response[i].piva + "</div>" + 
+                    "<div class='out'>" + response[i].ragione_sociale + "</div>" + 
+                    "<div class='out'>" + response[i].cellulare + "</div>" + 
+                    "<div class='out'>" + response[i].indirizzo + "</div>" + 
+                    "<div class='out'>" + response[i].citta + "</div>" + 
+                    "<div class='out'>" + response[i].provincia + "</div>" + 
+                    "<div class='row'></div>";
+            }     
         $("#post").html(out);
     }
     function addOperationForm(clienti, manodopera, articoli) {
+        if (clienti === "NON CI SONO CLIENTI") {
+            out = "<p>Non ci sono clienti, non &#232 possibile aggiungere alcuna Operazione! <br>" + 
+                 "<br><input type='button' onclick= addClient() value='Aggiungi Cliente'>";
             //genero il menu per i clienti
+        } else {
             client = "<select id=select name=codCliente><option value=null>---</option>";
             for (i = 0; i < clienti.length; i++) {
                 client += "<option value=" + clienti[i].cf +  ">" + clienti[i].cf + "</option>";
             }
             client += "</select>";
-            //genero il menu per gli articoli
-            
+            //genero il menu per gli articoli se sono presenti
             art = "<select id=select name=codArticolo><option value=null>---</option>";
-            for (i = 0; i < articoli.length; i++) {
-                art += "<option value=" + articoli[i].codice +  ">" + articoli[i].codice + "</option>";
+            if(articoli !== "NON CI SONO ARTICOLI"){   
+                for (i = 0; i < articoli.length; i++) {
+                    art += "<option value=" + articoli[i].codice +  ">" + articoli[i].codice + "</option>";
+                }
             }
             art += "</select>";
             //creo il menu per la quantita
@@ -326,46 +368,49 @@ function makeClientsTable(response) {
                 quantita += "<option value=" + i + ">" + i + "</option>";
             }
             quantita += "</select>";
-            //creo il menu per la manodopera
-          
+            //creo il menu per la manodopera        
             man = "<select id=select name=codMan><option value=null>---</option>";
             for (i = 0; i < manodopera.length; i++) {
                 man += "<option value=" + manodopera[i].id_manodopera + ">" + manodopera[i].id_manodopera + "</option>";
             }
             man += "</select>";
             //collego i campi del form con i menu creati
-            out = "<center><form name='addOperation'><table border=0><tr>";
-            out += "<td align=left>*Scegli Cliente</td><td>" + client + "</td></tr>";
-            out += "<td align=left>*Scegli Articolo</td><td>" + art + "</td></tr>";
-            out += "<td align=left>*Scegli Quantit&#224</td><td>" + quantita + "</td></tr>";
-            out += "<td align=left>*Tipo Prestazione</td><td>" + man + "</td></tr>";
-            out += "<tr><td colspan=2  style=text-align:center><br><input type=button onclick=makeAddOperationJson() value='Salva'></td></tr>";  
-            out += "</table></form><p>* Campi Obbligatori</p></center>";
+            out = "<form name='addOperation'>";
+            out += "<div class='cell'>*Scegli Cliente</div><div class='cell'>" + client + "</div>";
+            out += "<div class='row'></div>";
+            out += "<div class='cell'>*Scegli Articolo</div><div class='cell'>" + art + "</div>";
+            out += "<div class='row'></div>";
+            out += "<div class='cell'>*Scegli Quantit&#224</div><div class='cell'>" + quantita + "</div>";
+            out += "<div class='row'></div>";
+            out += "<div class='cell'>*Tipo Prestazione</div><div class='cell'>" + man + "</div>";
+            out += "<div class='row'></div>";
+            out += "<div class='button'><br><input type=button onclick=makeAddOperationJson() value='Salva'>";  
+            out += "<p>* Campi Obbligatori</p></div>";
+            out += "<div class='row'></div></form>";
+        }
         $("#post").html(out);
     }
     //metodo responsabile della generazione della tabella delle operazioni,i dati 
     //passati in input provengono da una query fatta al database, se questa non
-    // produce nessun risultato ciï¿½ verrï¿½ notificato come risultato.
+    // produce nessun risultato ciò verrà notificato come risultato.
     function makeOperationTable(response) {
-        $("#post").html("out");
-            out = "<table width=100%>";
-            out += "<tr>";
-            out += "<th></th>";
-            out += "<th>Id Operazione</th>";
-            out += "<th>Id Cliente</th>";
-            out += "<th>Id Articolo</th>";
-            out += "<th>Prestazione</th>";
-            out += "<th>Quantit&#224</th>";
-            out += "<th>Prezzo</th></tr>";           
+            out = "<div class='out'></div>";
+            out += "<div class='out'>Id Operazione</div>";
+            out += "<div class='out'>Id Cliente</div>";
+            out += "<div class='out'>Id Articolo</div>";
+            out += "<div class='out'>Prestazione</div>";
+            out += "<div class='out'>Quantit&#224</div>";
+            out += "<div class='out'>Prezzo</th></div>";  
+            out += "<div class='row'></div>";
             for (i = 0; i < response.length; i++) {
-                out += "<tr><td id=" + response[i].id_operazione + "><input type='checkbox'></td><td>" + 
-                        response[i].id_operazione + "</td><td>" +
-                        response[i].id_cliente + "</td><td>" +
-                        response[i].id_articolo + "</td><td>" + 
-                        response[i].id_manodopera + "</td><td>" +
-                        response[i].quantita + "</td><td>" + 
-                        response[i].costo + "</td></tr>";
+                out += "<div class='out' id=" + response[i].id_operazione + "><input type='checkbox'></div>" + 
+                        "<div class='out'>" + response[i].id_operazione + "</div>" +
+                        "<div class='out'>" + response[i].id_cliente + "</div>" +
+                        "<div class='out'>" + response[i].id_articolo + "</div>" + 
+                        "<div class='out'>" + response[i].id_manodopera + "</div>" +
+                        "<div class='out'>" + response[i].quantita + "</div>" + 
+                        "<div class='out'>" + response[i].costo + "</div>" +
+                        "<div class='row'></div>";
             }
-            out += "</table>";
             $("#post").html(out);
     }
