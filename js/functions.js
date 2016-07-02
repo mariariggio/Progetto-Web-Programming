@@ -198,6 +198,14 @@ function makeAddSuppJson() {
         ajaxEvent(req);
     }
 }
+function show(menu){
+    var request = {
+        "operation": "show",
+        "menu": menu
+    };
+    req = JSON.stringify(request);
+    ajaxEvent(req);
+}
 //funzione che crea l'oggetto XMLHTTP. Prende in imput dei dati che invia al 
 //server tramite ajax.
 function ajaxEvent(data) {
@@ -235,7 +243,15 @@ function makeResponse(arr) {
         addOperationForm(response.clienti, response.manodopera, response.articoli);
     } else if(response.operation === "addOperation"){
         makeOperationTable(response.value);
-    } 
+    } else if (response.operation === "showClient"){
+        makeClientsTable(response.value);
+    } else if (response.operation === "showOperation"){
+        makeOperationTable(response.value);
+    } else if (response.operation === "showSupplier"){
+        makeSupplierTable(response.value);
+    } else if (response.operation === "showArticle"){
+        makeArticlesTable(response.value);
+    }
 }
 function makeClientsTable(response) {
     out = "<div class='out'></div>";
@@ -295,6 +311,9 @@ function makeClientsTable(response) {
      $("#post").html(out);
  }
     function makeArticlesTable(response) {
+        if(response === "NON CI SONO ARTICOLI"){
+            out="Non ci sono Articoli!";
+        } else {
             out = "<div class='out'></div>";
             out += "<div class='out'>Codice Articolo</div>";
             out += "<div class='out'>Categoria</div>";
@@ -315,7 +334,8 @@ function makeClientsTable(response) {
                        "<div class='out'>" + response[i].cod_fornitore + "</div>" + 
                        "<div class='row'></div>";
             }
-            $("#post").html(out);
+        }
+        $("#post").html(out);
     }
  
 

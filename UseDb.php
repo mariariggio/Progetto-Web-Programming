@@ -146,6 +146,25 @@ class UseDb {
         }
         return $ret;
     }
+    //metodo che esegue la query che ritorna gli articoli del database in base 
+    //alla quantita, se sono disponibili, in esaurimento o esautiri.
+    public function getMagazzino($count){
+        $ret= "NON CI SONO ARTICOLI";
+        global $connection;
+        if($count == "F"){
+            $query = mysqli_query($connection, "SELECT * FROM articoli WHERE quantita>0");
+        } else if ($count == "E"){
+          $query = mysqli_query($connection, "SELECT * FROM articoli WHERE quantita=0");  
+        } else if ($count == "EF"){
+          $query = mysqli_query($connection, "SELECT * FROM articoli WHERE (quantita>=1 AND quantita <=10)");  
+        }
+        if (!$query){
+            die ("Errore nella query getMagazzino:".mysqli_error($connection));
+        }else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);
+        }
+        return $ret;
+    }
     //metodo che esegue la query per l'inserimento di un nuovo fornitore nella
     //tabella fornitori del database. Se l'inserimento va a buon fine ritorna
     //true altrimenti un messaggio di errore

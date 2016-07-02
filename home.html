@@ -60,25 +60,25 @@
             });
             $("#operazioni").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li>\n\
-                    <li><a href=# onclick=showOperation()>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
+                    <li><a href=# onclick=show('Operation')>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
                     <li><a href=# onclick=concludiOperation()>Concludi</a></li>");
             });
             $("#clienti").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li>\n\
-                    <li><a href=# onclick=showClient()>Mostra Clienti<ul id='show_client'></ul></a></li>");
+                    <li><a href=# onclick=show('Client')>Mostra Clienti<ul id='show_client'></ul></a></li>");
             });
             $("#articoli").click(function () {         
                 $("#leftMenu").html("<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li>\n\
-                    <li><a href=# onclick=inMagazzino()>...in magazzino<ul id=show_op_art1></ul></a></li>\n\
-                    <li><a href=# onclick=nonMagazzino()>...non in magazzino<ul id=show_op_art2></ul></a></li>\n\
-                    <li><a href=# onclick=inEsaurimento()>...in esaurimento<ul id=show_op_art3></ul></a></li>");
+                    <li><a href=# onclick=show('inM')>...in magazzino<ul id=show_op_art1></ul></a></li>\n\
+                    <li><a href=# onclick=show('nInM')>...non in magazzino<ul id=show_op_art2></ul></a></li>\n\
+                    <li><a href=# onclick=show('inEs')>...in esaurimento<ul id=show_op_art3></ul></a></li>");
             });
             $("#fatture").click(function () {      
                 $("#leftMenu").html("<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>");
             });
             $("#fornitori").click(function () {        
                 $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li>\n\
-                    <li><a href=# onclick=showSupplier()>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
+                    <li><a href=# onclick=show('Supplier')>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
             });
         </script>
     </body>

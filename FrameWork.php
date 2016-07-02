@@ -31,8 +31,21 @@ class FrameWork {
             return $this->addArticle($request);
         } else if ($request['operation']== "addSupplier"){
             return $this->addSupplier($request);
-        } 
+        } else if($request['operation'] == "show" && $request['menu'] == "Client"){
+            return $this->getClients();
+        } else if ($request['operation'] == "show" && $request['menu'] == "Operation"){
+            return $this->getOperations();
+        } else if ($request['operation'] == "show" && $request['menu'] == "Supplier"){
+            return $this->getSupplier();
+        } else if ($request['operation'] == "show" && $request['menu'] == "inM"){
+            return $this->Magazzino("F");
+        } else if ($request['operation'] == "show" && $request['menu'] == "nInM"){
+            return $this->Magazzino("E");
+        } else if ($request['operation'] == "show" && $request['menu'] == "inEs"){
+            return $this->Magazzino("EF");
+        }
     }
+    
     //Metodo che si occupa dell'inserimento di una nuova operazione. Chiama un 
     //metodo della classe UdeDb 
     private function getAddOperationForm(){
@@ -58,8 +71,10 @@ class FrameWork {
     }
     //Ritorna la tabella con i clienti
     private function getOperations(){
-        $res = $this->db->getoperation();
-        return $res;
+        $result['operation'] = "showOperation";
+        $result['value'] = $this->db->getOperation();
+        $ret = json_encode($result);
+        return $ret;
     }
     //Metodo che si occupa dell'inserimento di un nuovo cliente. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
@@ -68,15 +83,17 @@ class FrameWork {
         $messagge = $this->db->newClient($request);
         if(is_bool($messagge)){
             $result['operation'] = "addClient";
-            $result['value'] = $this->getClients();
+            $result['value'] = $this->db->getClient();
             $ret = json_encode($result);
             return $ret;
         }
     }
     //Ritorna la pagina con i clienti
     private function getClients(){
-        $res = $this->db->getClient();
-        return $res;
+        $result['operation'] = "showClient";
+        $result['value'] = $this->db->getClient();
+        $ret = json_encode($result);
+        return $ret;
     }
     //metodo responsabile della creazione del form per l'inserimento di un 
     //nuovo articolo. Chiama un metodo della classe UseDb che restituisce la 
@@ -99,10 +116,18 @@ class FrameWork {
             return $ret;
         }
     }
-    //Ritorna la pagina con gli articoli
+    //Ritorna gli articoli
     private function getArticles(){
         $res = $this->db->getArticle();
         return $res;
+    }
+    //richiama un metodo della classe UseDb che restituisce gli articoli in base
+    //alla quantita.
+    private function Magazzino($count){
+        $result['operation'] = "showArticle";
+        $result['value'] = $this->db->getMagazzino($count);
+        $ret = json_encode($result);
+        return $ret;
     }
     //Metodo che si occupa dell'inserimento di un nuovo fornitore. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
@@ -118,8 +143,10 @@ class FrameWork {
     }
     //Ritorna la pagina con i clienti
     private function getSupplier(){
-        $res = $this->db->getSupplier();
-        return $res;
+        $result['operation'] = "showSupplier";
+        $result['value'] = $this->db->getSupplier();
+        $ret = json_encode($result);
+        return $ret;
     }
 }
 
