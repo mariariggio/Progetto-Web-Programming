@@ -136,7 +136,7 @@ class FrameWork {
         $messagge = $this->db->newSupplier($request);
         if(is_bool($messagge)){
             $result['operation'] = "addSupplier";
-            $result['value'] = $this->getSupplier();
+            $result['value'] = $this->db->getSupplier();
             $ret = json_encode($result);
             return $ret;
         }

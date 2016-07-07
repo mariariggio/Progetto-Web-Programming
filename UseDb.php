@@ -69,7 +69,7 @@ class UseDb {
     }
     //metodo che esegue la query che restituisce le operazioni. 
       public function getOperation() {
-        $ret = "...NON CI SONO OPERAZIONI IN CORSO...";
+        $ret = "NON CI SONO OPERAZIONI";
         global $connection;
         $query = mysqli_query($connection, ("SELECT * FROM operazioni"));
         if (!$query) {

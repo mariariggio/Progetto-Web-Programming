@@ -198,6 +198,7 @@ function makeAddSuppJson() {
         ajaxEvent(req);
     }
 }
+//funzione che crea il json relativo al menu selezionato per l'operazione Mostra.
 function show(menu){
     var request = {
         "operation": "show",
@@ -229,6 +230,7 @@ function ajaxEvent(data) {
     //invio la richiesta al server
     self.xhttp.send('operation=' + data);
 }
+//funzione che elabora i dati ricevuti dal server sotto forma di oggetto JSON
 function makeResponse(arr) {
     var response = JSON.parse(arr);
     if (response.operation === "addClient") {
@@ -253,31 +255,41 @@ function makeResponse(arr) {
         makeArticlesTable(response.value);
     }
 }
+//funzione responsabile della generazione della tabella dei clienti, i dati 
+//provengono da una query fatta al database, se questa non produce nessun 
+//risultato ciò verrà visualizzato come risultato.
 function makeClientsTable(response) {
-    out = "<div class='out'></div>";
-    out += "<div class='out'><h>Codice Fiscale</h></div>";
-    out += "<div class='out'><h>Nome</h></div>";
-    out += "<div class='out'><h>Cognome</h></div>";
-    out += "<div class='out'><h>Indirizzo</h></div>";
-    out += "<div class='out'><h>Cellulare</h></div>";
-    out += "<div class='out'><h>Citt&#224</h></div>";
-    out += "<div class='out'><h>Provincia</h></div>";
-    out += "<div class='row'></div>";
-    for (i = 0; i < response.length; i++) {
-        out += "<div class='out' id=" + response[i].cf + "><input type='checkbox'></div>" + 
-                "<div class='out'>" + response[i].cf + "</div>" +
-                "<div class='out'>" + response[i].nome + "</div>" +
-                "<div class='out'>" + response[i].cognome + "</div>" +
-                "<div class='out'>" + response[i].indirizzo + "</div>" + 
-                "<div class='out'>" + response[i].cellulare + "</div>" +
-                "<div class='out'>" + response[i].citta + "</div>" + 
-                "<div class='out'>" + response[i].provincia+ "</div>" +
+    if(response === "NON CI SONO CLIENTI"){
+        out="Non ci sono Clienti!";
+    } else {
+        out = "<div class='outText'><h>Codice Fiscale</h></div>";
+        out += "<div class='outText'><h>Nome</h></div>";
+        out += "<div class='outText'><h>Cognome</h></div>";
+        out += "<div class='outText'><h>Indirizzo</h></div>";
+        out += "<div class='outText'><h>Cellulare</h></div>";
+        out += "<div class='outText'><h>Citt&#224</h></div>";
+        out += "<div class='outText'><h>Provincia</h></div>";
+        out += "<div class='row'></div>";
+        for (i = 0; i < response.length; i++) {
+            out += "<div class='outText'>" + response[i].cf + "</div>" +
+                "<div class='outText'>" + response[i].nome + "</div>" +
+                "<div class='outText'>" + response[i].cognome + "</div>" +
+                "<div class='outText'>" + response[i].indirizzo + "</div>" + 
+                "<div class='outText'>" + response[i].cellulare + "</div>" +
+                "<div class='outText'>" + response[i].citta + "</div>" + 
+                "<div class='outText'>" + response[i].provincia+ "</div>" +
+                "<div class='out'>" + 
+                "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
+                "<button id=" + response[i].cf + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                 "<div class='row'></div>";
+        }
     }
-    //out += "</table>";
     $("#post").html(out);
 }
-
+//funzione che crea il form per aggiungere un nuovo Articolo. Ogni articolo è
+//legato ad un fornitore quindi il metodo prende in input la lista dei
+//fornitori, e nel form generato sarà possibile scegliere il fornitore 
+//del nuovo articolo
  function addArticleForm(supplier) {
      //Controllo se sono stati registrati fornitori.
      if(supplier === "NON CI SONO FORNITORI"){
@@ -310,59 +322,73 @@ function makeClientsTable(response) {
     } 
      $("#post").html(out);
  }
+    //funzione responsabile della generazione della tabella dei clienti, i dati 
+    //provengono da una query fatta al database, se questa non produce nessun 
+    //risultato ciò verrà visualizzato come risultato.
     function makeArticlesTable(response) {
         if(response === "NON CI SONO ARTICOLI"){
             out="Non ci sono Articoli!";
         } else {
-            out = "<div class='out'></div>";
-            out += "<div class='out'>Codice Articolo</div>";
-            out += "<div class='out'>Categoria</div>";
-            out += "<div class='out'>Descrizione</div>";
-            out += "<div class='out'>Quantit&#224</div>";
-            out += "<div class='out'>Prezzo Acquisto</div>";
-            out += "<div class='out'>Prezzo Vendita</div>";
-            out += "<div class='out'>Codice Fornitore</div>";         
+            out = "<div class='outText'>Codice Articolo</div>";
+            out += "<div class='outText'>Categoria</div>";
+            out += "<div class='outText'>Descrizione</div>";
+            out += "<div class='outText'>Quantit&#224</div>";
+            out += "<div class='outText'>Prezzo Acquisto</div>";
+            out += "<div class='outText'>Prezzo Vendita</div>";
+            out += "<div class='outText'>Codice Fornitore</div>";         
             out += "<div class='row'></div>";
             for (i = 0; i < response.length; i++) {
-                out += "<div class='out' id=" + response[i].codice + "><input type='checkbox'></div>" + 
-                       "<div class='out'>" + response[i].codice + "</div>" + 
-                       "<div class='out'>" + response[i].categoria + "</div>" +
-                       "<div class='out'>" + response[i].descr +  "</div>" + 
-                       "<div class='out'>" + response[i].quantita + "</div>" + 
-                       "<div class='out'>" + response[i].prezzo_acquisto + "</div>" + 
-                       "<div class='out'>" + response[i].prezzo_vendita + "</div>" + 
-                       "<div class='out'>" + response[i].cod_fornitore + "</div>" + 
+                out += "<div class='outText'>" + response[i].codice + "</div>" + 
+                       "<div class='outText'>" + response[i].categoria + "</div>" +
+                       "<div class='outText'>" + response[i].descr +  "</div>" + 
+                       "<div class='outText'>" + response[i].quantita + "</div>" + 
+                       "<div class='outText'>" + response[i].prezzo_acquisto + "</div>" + 
+                       "<div class='outText'>" + response[i].prezzo_vendita + "</div>" + 
+                       "<div class='outText'>" + response[i].cod_fornitore + "</div>" + 
+                       "<div class='out'>" + 
+                       "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
+                       "<button id=" + response[i].codice + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                        "<div class='row'></div>";
             }
         }
         $("#post").html(out);
     }
- 
-
-//metodo responsabile della generazione della tabella dei fornitori, i dati 
+    //metodo responsabile della generazione della tabella dei fornitori, i dati 
     //provengono da una query fatta al database, se questa non produce nessun 
     //risultato ciò verrà notificato come risultato.
     function makeSupplierTable(response) {
-        out = "<div class='out'></div>";
-        out += "<div class='out'>P. Iva</div>";
-        out += "<div class='out'>Ragione Sociale</div>";
-        out += "<div class='out'>Cellulare</div>";
-        out += "<div class='out'>Indirizzo</div>";
-        out += "<div class='out'>Citt&#224</div>";
-        out += "<div class='out'>Provincia</div>";
+        if(response === "NON CI SONO FORNITORI"){
+            out="Non ci sono Fornitori!";
+        } else {
+        out = "<div class='outText'>P. Iva</div>";
+        out += "<div class='outText'>Ragione Sociale</div>";
+        out += "<div class='outText'>Cellulare</div>";
+        out += "<div class='outText'>Indirizzo</div>";
+        out += "<div class='outText'>Citt&#224</div>";
+        out += "<div class='outText'>Provincia</div>";
         out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
-            out +="<div class='out' id=" + response[i].piva + "><input type='checkbox'></div>" +
-                    "<div class='out'>" + response[i].piva + "</div>" + 
-                    "<div class='out'>" + response[i].ragione_sociale + "</div>" + 
-                    "<div class='out'>" + response[i].cellulare + "</div>" + 
-                    "<div class='out'>" + response[i].indirizzo + "</div>" + 
-                    "<div class='out'>" + response[i].citta + "</div>" + 
-                    "<div class='out'>" + response[i].provincia + "</div>" + 
+            out +=  "<div class='outText'>" + response[i].piva + "</div>" + 
+                    "<div class='outText'>" + response[i].ragione_sociale + "</div>" + 
+                    "<div class='outText'>" + response[i].cellulare + "</div>" + 
+                    "<div class='outText'>" + response[i].indirizzo + "</div>" + 
+                    "<div class='outText'>" + response[i].citta + "</div>" + 
+                    "<div class='outText'>" + response[i].provincia + "</div>" +
+                    "<div class='out'>" + 
+                    "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
+                    "<button id=" + response[i].piva + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                     "<div class='row'></div>";
-            }     
+            }
+        }
         $("#post").html(out);
     }
+    function deleteEl(element){   
+    var recupero_id = $(element).attr("id");   
+    alert(recupero_id);
+    }
+    //funzione che genera il form per aggiungere una nuova operazione. Nel form 
+    //sono disponibili dati riguardo i clienti, gli articoli, il tipo di
+    // manodopera. Tali dati provanegono da un'opportuna query fatta al database.   
     function addOperationForm(clienti, manodopera, articoli) {
         if (clienti === "NON CI SONO CLIENTI") {
             out = "<p>Non ci sono clienti, non &#232 possibile aggiungere alcuna Operazione! <br>" + 
@@ -414,23 +440,28 @@ function makeClientsTable(response) {
     //passati in input provengono da una query fatta al database, se questa non
     // produce nessun risultato ciò verrà notificato come risultato.
     function makeOperationTable(response) {
-            out = "<div class='out'></div>";
-            out += "<div class='out'>Id Operazione</div>";
-            out += "<div class='out'>Id Cliente</div>";
-            out += "<div class='out'>Id Articolo</div>";
-            out += "<div class='out'>Prestazione</div>";
-            out += "<div class='out'>Quantit&#224</div>";
-            out += "<div class='out'>Prezzo</th></div>";  
+        if(response === "NON CI SONO OPERAZIONI"){
+            out="Non sono ancora state inserite operazioni";
+        } else {
+            out = "<div class='outText'>Id Operazione</div>";
+            out += "<div class='outText'>Id Cliente</div>";
+            out += "<div class='outText'>Id Articolo</div>";
+            out += "<div class='outText'>Prestazione</div>";
+            out += "<div class='outText'>Quantit&#224</div>";
+            out += "<div class='outText'>Prezzo</th></div>";  
             out += "<div class='row'></div>";
             for (i = 0; i < response.length; i++) {
-                out += "<div class='out' id=" + response[i].id_operazione + "><input type='checkbox'></div>" + 
-                        "<div class='out'>" + response[i].id_operazione + "</div>" +
-                        "<div class='out'>" + response[i].id_cliente + "</div>" +
-                        "<div class='out'>" + response[i].id_articolo + "</div>" + 
-                        "<div class='out'>" + response[i].id_manodopera + "</div>" +
-                        "<div class='out'>" + response[i].quantita + "</div>" + 
-                        "<div class='out'>" + response[i].costo + "</div>" +
+                out +=  "<div class='outText'>" + response[i].id_operazione + "</div>" +
+                        "<div class='outText'>" + response[i].id_cliente + "</div>" +
+                        "<div class='outText'>" + response[i].id_articolo + "</div>" + 
+                        "<div class='outText'>" + response[i].id_manodopera + "</div>" +
+                        "<div class='outText'>" + response[i].quantita + "</div>" + 
+                        "<div class='outText'>" + response[i].costo + "</div>" +
+                        "<div class='out'>" + 
+                       "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
+                       "<button id=" + response[i].id_operazione + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                         "<div class='row'></div>";
             }
-            $("#post").html(out);
+        }
+        $("#post").html(out);
     }

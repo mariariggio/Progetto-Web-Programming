@@ -194,7 +194,7 @@ h {
     
 }
 div.post {
- 
+ margin: 0 auto;
 }
 div.cell {
     text-align: right;
@@ -204,13 +204,23 @@ div.cell {
     padding: 3px 0 ;
     margin: 0px 5px;
 }
-div.out {
+div.outText {
     text-align: center;
+    border: 1px solid #eee;
     float:left;
     width:130px;
-    border: none;
-    padding: 3px 0 ;
-    margin: 0px 5px;
+    height: 35px;   
+    padding-top: 15px;   
+}
+div.out {
+    text-align: center;
+    border: 1px solid #eee;
+    float:left;
+    width:130px;
+    height: 35px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    
 }
 div.row {
     clear:both;        
@@ -221,6 +231,25 @@ div.button {
 }
 select {
     width: 100%;
+}
+button {
+ cursor: pointer;
+ text-align: center;
+ color: #fff;
+ padding: 7px 20px;
+ margin: 0 3px;
+ border: solid 1px #0076a3;
+ background: #4CAF50;
+ background: linear-gradient(top,  #095b24,  #1e7a3d);
+ border-radius: 8px;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+button:hover {
+ background: #4CAF50;
+}
+button:active {
+	position: relative;
+	top: 1px;
 }
 
     /*-- responsive media queries --*/
