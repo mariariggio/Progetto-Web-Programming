@@ -43,6 +43,12 @@ class FrameWork {
             return $this->Magazzino("E");
         } else if ($request['operation'] == "show" && $request['menu'] == "inEs"){
             return $this->Magazzino("EF");
+        } else if ($request['operation'] == "del" && $request['menu'] == "client"){
+            return $this->delClient($request);
+        } else if ($request['operation'] == "del" && $request['menu'] == "article"){
+            return $this->delArticle($request);
+        } else if ($request['operation'] == "del" && $request['menu'] == "supplier"){
+            return $this->delSupplier($request);
         }
     }
     
@@ -95,6 +101,15 @@ class FrameWork {
         $ret = json_encode($result);
         return $ret;
     }
+    //metodo responsabile dell'eliminazione di un cliente. Chiama un metodo della
+    //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
+    //l'elenco dei clienti aggiornato.
+    private function delClient($request){
+        $messagge = $this->db->delClient($request);
+         if(is_bool($messagge)){
+            return $this->getClients();
+        }
+    }
     //metodo responsabile della creazione del form per l'inserimento di un 
     //nuovo articolo. Chiama un metodo della classe UseDb che restituisce la 
     //lista dei fornitori.
@@ -118,8 +133,19 @@ class FrameWork {
     }
     //Ritorna gli articoli
     private function getArticles(){
-        $res = $this->db->getArticle();
-        return $res;
+        $result['operation'] = "showArticle";
+        $result['value'] = "$this->db->getArticle()";
+        $ret = json_encode($result);
+        return $ret;
+    }
+    //metodo responsabile dell'eliminazione di un articolo. Chiama un metodo della
+    //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
+    //l'elenco degli articoli aggiornato.
+    private function delArticle($request){
+        $messagge = $this->db->delArticle($request);
+        if(is_bool($messagge)){
+           return $this->getArticles();
+        }
     }
     //richiama un metodo della classe UseDb che restituisce gli articoli in base
     //alla quantita.
@@ -147,6 +173,15 @@ class FrameWork {
         $result['value'] = $this->db->getSupplier();
         $ret = json_encode($result);
         return $ret;
+    }
+    //metodo responsabile dell'eliminazione di un fornitore. Chiama un metodo della
+    //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
+    //l'elenco dei fornitori aggiornato.
+    private function delSupplier($request){
+        $messagge = $this->db->delSupplier($request);
+         if(is_bool($messagge)){
+            return $this->getSupplier();
+        }
     }
 }
 

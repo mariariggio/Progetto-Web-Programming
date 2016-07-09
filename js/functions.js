@@ -1,4 +1,6 @@
-/* global elements, nome */
+//variabili utilizzate per la cencellazione degli elementi.
+var id;
+var menuType;
 
 $("a.menuor").focus(function () {
     $("#post").text("");
@@ -253,8 +255,38 @@ function makeResponse(arr) {
         makeSupplierTable(response.value);
     } else if (response.operation === "showArticle"){
         makeArticlesTable(response.value);
-    }
+    } 
 }
+       
+        $(function() {
+           $( "#dialog" ).dialog({
+               autoOpen: false,
+               height: 160,
+               width: 300,
+               modal:true,
+               buttons: {
+                   "Conferma": deleteElementJson,
+                   "Annulla": function() {
+                       $("#dialog").dialog( "close" );
+                   }
+               }       
+           });
+           function deleteElementJson() {
+              var request = {
+                  "operation":"del",
+                  "menu": menuType,
+                  "id": id
+              };
+              req = JSON.stringify(request);
+              ajaxEvent(req);
+              $( "#dialog").dialog( "close" );
+            }
+            $( document ).on('click', '.delete',function() {
+              id= $( this ).attr("id" );
+              $("#msg").text(id + "?");
+              $( "#dialog" ).dialog( "open" );
+            });
+        });
 //funzione responsabile della generazione della tabella dei clienti, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
 //risultato ciò verrà visualizzato come risultato.
@@ -280,7 +312,7 @@ function makeClientsTable(response) {
                 "<div class='outText'>" + response[i].provincia+ "</div>" +
                 "<div class='out'>" + 
                 "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
-                "<button id=" + response[i].cf + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
+                "<button id='" + response[i].cf + "' class='delete'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                 "<div class='row'></div>";
         }
     }
@@ -347,7 +379,7 @@ function makeClientsTable(response) {
                        "<div class='outText'>" + response[i].cod_fornitore + "</div>" + 
                        "<div class='out'>" + 
                        "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
-                       "<button id=" + response[i].codice + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
+                       "<button id=" + response[i].codice + " class='delete'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                        "<div class='row'></div>";
             }
         }
@@ -376,16 +408,12 @@ function makeClientsTable(response) {
                     "<div class='outText'>" + response[i].provincia + "</div>" +
                     "<div class='out'>" + 
                     "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
-                    "<button id=" + response[i].piva + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
+                    "<button id='" + response[i].piva + "' class='delete'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                     "<div class='row'></div>";
             }
         }
         $("#post").html(out);
-    }
-    function deleteEl(element){   
-    var recupero_id = $(element).attr("id");   
-    alert(recupero_id);
-    }
+    }   
     //funzione che genera il form per aggiungere una nuova operazione. Nel form 
     //sono disponibili dati riguardo i clienti, gli articoli, il tipo di
     // manodopera. Tali dati provanegono da un'opportuna query fatta al database.   
@@ -459,7 +487,7 @@ function makeClientsTable(response) {
                         "<div class='outText'>" + response[i].costo + "</div>" +
                         "<div class='out'>" + 
                        "<button id='modify' class='pulsante'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" + 
-                       "<button id=" + response[i].id_operazione + " onclick=deleteEl(this)><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
+                       "<button id='" + response[i].id_operazione + "' class='delete'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                         "<div class='row'></div>";
             }
         }

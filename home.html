@@ -4,19 +4,24 @@
         <title>home</title>
         <link href="./css/style.css" rel="stylesheet" type="text/css" media="all" />
         <link  rel = "stylesheet"  href = "./font-awesome/css/font-awesome.css" >
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="/resources/demos/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+     
         <script src="./js/functions.js"></script>
     </head>
     <body>
         <div class="headerHome">	
             <div id="menu">
-                <a id="operazioni" class="menuor" href="#">Operazioni</a>
-                <a id="clienti" class="menuor" href="#">Clienti</a>
-                <a id="articoli" class="menuor" href="#">Articoli</a>
-                <a id="fatture" class="menuor" href="#">Fatture</a>
-                <a id="fornitori" class="menuor" href="#">Fornitori</a>
+                <a id="operation" class="menuor" href="#">Operazioni</a>
+                <a id="client" class="menuor" href="#">Clienti</a>
+                <a id="article" class="menuor" href="#">Articoli</a>
+                <a id="invoice" class="menuor" href="#">Fatture</a>
+                <a id="supplier" class="menuor" href="#">Fornitori</a>
             </div>
             <!-- end #menu -->
             <div id="search">
@@ -44,40 +49,46 @@
             <!-- end #sidebar -->
             <div id="content">
                 <div id="post" class="post">
-                    <p></p>	
+                    <p></p>	     
                 </div>
+                <div id="dialog" title="Conferma Eliminazione">
+                        <p> Sei sicuro di voler eliminare l'elemento:</p>
+                        <p id="msg"></p>
+                </div> 
             </div>
             <!-- end #content -->
         </div>
         <!-- end #page -->
-
-        <script>
+        
+        <script>  
+        
             $("a.menuor").focus(function () {
+                menuType = $(this).attr("id");
                 $("#post").text("");
                 $(this).css("background-color", "#4CAF50");
             });
             $("a.menuor").blur(function () {
                 $(this).css("background-color", "#5f5f5f");
             });
-            $("#operazioni").click(function () {       
+            $("#operation").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li>\n\
                     <li><a href=# onclick=show('Operation')>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
                     <li><a href=# onclick=concludiOperation()>Concludi</a></li>");
             });
-            $("#clienti").click(function () {       
+            $("#client").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li>\n\
                     <li><a href=# onclick=show('Client')>Mostra Clienti<ul id='show_client'></ul></a></li>");
             });
-            $("#articoli").click(function () {         
+            $("#article").click(function () {         
                 $("#leftMenu").html("<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li>\n\
                     <li><a href=# onclick=show('inM')>...in magazzino<ul id=show_op_art1></ul></a></li>\n\
                     <li><a href=# onclick=show('nInM')>...non in magazzino<ul id=show_op_art2></ul></a></li>\n\
                     <li><a href=# onclick=show('inEs')>...in esaurimento<ul id=show_op_art3></ul></a></li>");
             });
-            $("#fatture").click(function () {      
+            $("#invoice").click(function () {      
                 $("#leftMenu").html("<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>");
             });
-            $("#fornitori").click(function () {        
+            $("#supplier").click(function () {        
                 $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li>\n\
                     <li><a href=# onclick=show('Supplier')>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
             });

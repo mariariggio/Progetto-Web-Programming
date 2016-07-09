@@ -251,5 +251,8 @@ button:active {
 	position: relative;
 	top: 1px;
 }
+body { 
+    font-size: 62.5%;
+}
 
     /*-- responsive media queries --*/
