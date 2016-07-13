@@ -113,6 +113,25 @@ class UseDb {
         }
         return $ret;
     }
+    //metodo che esegue la query per l'aggiornamento dei dati di un cliente. Se 
+    //la modifica va a buon fine restuisce true altrimenti notifica l'errore
+    public function modClient($value){
+       $vecchio_cf = $value['vecchio_cf'];
+       $new_cf = $value['cf'];
+       $new_nome = $value['nome'];
+       $new_cognome = $value['cognome'];
+       $new_indirizzo = $value['indirizzo'];
+       $new_cellulare = $value['cellulare'];
+       $new_citta = $value['citta'];
+       $new_provincia = $value['provincia'];
+       global $connection;
+       $query = mysqli_query($connection,("UPDATE clienti SET cf='$new_cf', nome='$new_nome', cognome='$new_cognome',indirizzo='$new_indirizzo', cellulare='$new_cellulare',citta='$new_citta', provincia='$new_provincia' WHERE cf='$vecchio_cf'"));
+       if (!$query) {
+            die("Errore di modifica: " . mysqli_error($connection));
+        } else {
+           return true;
+        }
+    }
     //metodo che esegue la query che elimina il cliente dal database. Prende in
     //imput il codice fiscale del cliente e se la cancellazione va a buon fine 
     //ritorna true
@@ -158,6 +177,25 @@ class UseDb {
             $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);
         }
         return $ret;
+    }
+    //metodo che esegue la query per l'aggiornamento dei dati di un cliente. Se 
+    //la modifica va a buon fine restuisce true altrimenti notifica l'errore
+    public function modArticle($value){
+       $vecchio_codice = $value['vecchio_codice'];
+       $new_codice = $value['codArticolo'];
+       $new_categoria = $value['categoria'];
+       $new_descr = $value['descrizione'];
+       $new_quantita = $value['quantita'];
+       $new_prezAcquisto = $value['prezAcquisto'];
+       $new_prezVendita = $value['prezVendita'];
+       $new_codForn = $value['codForn'];
+       global $connection;
+       $query = mysqli_query($connection,("UPDATE articoli SET codice='$new_codice', categoria='$new_categoria', descr='$new_descr',quantita='$new_quantita', prezzo_acquisto='$new_prezAcquisto', prezzo_vendita='$new_prezVendita', cod_fornitore='$new_codForn' WHERE codice='$vecchio_codice'"));
+       if (!$query) {
+            die("Errore di modifica: " . mysqli_error($connection));
+        } else {
+           return true;
+        }
     }
     //metodo che esegue la query che elimina un articolo dal database. Prende in
     //imput il codice dell'articolo e se la cancellazione va a buon fine 
@@ -222,6 +260,24 @@ class UseDb {
              $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);
         }
         return $ret;
+    }
+    //metodo che esegue la query per l'aggiornamento dei dati di un fornitore.
+    //Se la modifica va a buon fine restuisce true altrimenti notifica l'errore.
+    public function modSupplier($value){
+       $vecchia_pIva = $value['vecchia_pIva'];
+       $new_pIva = $value['pIva'];
+       $new_ragSociale = $value['ragSociale'];
+       $new_cellulare = $value['cellulare'];
+       $new_indirizzo = $value['indirizzo'];
+       $new_citta = $value['citta'];
+       $new_provincia = $value['provincia'];
+       global $connection;
+       $query = mysqli_query($connection,("UPDATE fornitori SET piva='$new_pIva', ragione_sociale='$new_ragSociale', cellulare='$new_cellulare',indirizzo='$new_indirizzo',citta='$new_citta', provincia='$new_provincia' WHERE piva='$vecchia_pIva'"));
+       if (!$query) {
+            die("Errore di modifica: " . mysqli_error($connection));
+        } else {
+           return true;
+        }
     }
     //metodo che esegue la query che elimina un fornitore dal database. Prende in
     //imput la P.iva del fornitore e se la cancellazione va a buon fine 

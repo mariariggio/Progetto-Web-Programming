@@ -49,6 +49,12 @@ class FrameWork {
             return $this->delArticle($request);
         } else if ($request['operation'] == "del" && $request['menu'] == "supplier"){
             return $this->delSupplier($request);
+        } else if ($request['operation'] == "modClient"){
+            return $this->modClient($request);
+        } else if ($request['operation'] == "modArticle"){
+            return $this->modArticle($request);
+        } else if ($request['operation'] == "modSupplier"){
+            return $this->modSupplier($request);
         }
     }
     
@@ -101,6 +107,18 @@ class FrameWork {
         $ret = json_encode($result);
         return $ret;
     }
+    //Metodo che si occupa della modifica di un cliente. Chiama un metodo della
+    //classe UseDb e se il risultato è positivo ritorna la pagina con i clienti 
+    //aggiornata
+    private function modClient($request){
+        $messagge = $this->db->modClient($request);
+        if (is_bool($messagge)){
+            $result['operation'] = "modClient";
+            $result['value'] = $this->db->getClient();
+            $ret = json_encode($result);
+        return $ret;
+        }
+    }
     //metodo responsabile dell'eliminazione di un cliente. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
     //l'elenco dei clienti aggiornato.
@@ -126,7 +144,7 @@ class FrameWork {
         $messagge = $this->db->newArticle($request);
         if(is_bool($messagge)){
             $result['operation'] = "addArticle";
-            $result['value'] = $this->getArticles();
+            $result['value'] = $this->db->getArticle();
             $ret = json_encode($result);
             return $ret;
         }
@@ -134,9 +152,21 @@ class FrameWork {
     //Ritorna gli articoli
     private function getArticles(){
         $result['operation'] = "showArticle";
-        $result['value'] = "$this->db->getArticle()";
+        $result['value'] = $this->db->getArticle();
         $ret = json_encode($result);
         return $ret;
+    }
+    //Metodo che si occupa della modifica di un articolo. Chiama un metodo della
+    //classe UseDb e se il risultato è positivo ritorna la pagina con gli articoli 
+    //aggiornata
+    private function modArticle($request){
+        $messagge = $this->db->modArticle($request);
+        if (is_bool($messagge)){
+            $result['operation'] = "modArticle";
+            $result['value'] = $this->db->getArticle();
+            $ret = json_encode($result);
+        return $ret;
+        }
     }
     //metodo responsabile dell'eliminazione di un articolo. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
@@ -173,6 +203,18 @@ class FrameWork {
         $result['value'] = $this->db->getSupplier();
         $ret = json_encode($result);
         return $ret;
+    }
+    //Metodo che si occupa della modifica di un fornitore. Chiama un metodo della
+    //classe UseDb e se il risultato è positivo ritorna la pagina con i fornitori 
+    //aggiornata
+    private function modSupplier($request){
+        $messagge = $this->db->modSupplier($request);
+        if (is_bool($messagge)){
+            $result['operation'] = "modSupplier";
+            $result['value'] = $this->db->getSupplier();
+            $ret = json_encode($result);
+            return $ret;
+        }
     }
     //metodo responsabile dell'eliminazione di un fornitore. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
