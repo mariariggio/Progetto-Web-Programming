@@ -265,7 +265,7 @@ function makeResponse(arr) {
 }
 //Gestione della finestra di dialogo per la cancellazione.
 $(function () {
-    $("#dialog").dialog({
+    $("#dialogEl").dialog({
         autoOpen: false,
         height: 160,
         width: 300,
@@ -273,7 +273,7 @@ $(function () {
         buttons: {
             "Conferma": deleteElementJson,
             "Annulla": function () {
-                $("#dialog").dialog("close");
+                $("#dialogEl").dialog("close");
             }
         }
     });
@@ -285,13 +285,13 @@ $(function () {
         };
         req = JSON.stringify(request);
         ajaxEvent(req);
-        $("#dialog").dialog("close");
+        $("#dialogEl").dialog("close");
     }
     $(document).on('click', '.delete', function () {
         id = $(this).attr("id");
-        $("#dialog").html("<p> Sei sicuro di voler eliminare l'elemento:<br>"+ id +"?</p>");
+        $("#dialogEl").html("<p> Sei sicuro di voler eliminare l'elemento:<br>"+ id +"?</p>");
         //$("#msg").text(id + "?");
-        $("#dialog").dialog("open");
+        $("#dialogEl").dialog("open");
     });
 });
 //Gestione finestra di dialogo per la modifica di un cliente
