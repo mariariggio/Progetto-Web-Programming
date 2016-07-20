@@ -79,6 +79,57 @@ class UseDb {
         }
         return $ret;
     }
+    //metodo che esegue una query di selezione dei dati riguardante le 
+    //informazioni dei clienti cha hanno rischiesto una prestazione.
+    public function getForFattura(){
+         $ret = "NON CI SONO OPERAZIONI IN CORSO";
+        global $connection;
+        $query = mysqli_query($connection, ("SELECT distinct id_cliente FROM operazioni WHERE id_fattura IS NULL"));
+        if (!$query) {
+            die("Errore nella query getForFattura: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        }
+        return $ret;
+    }
+    //metodo che esegue la query per la creazione di una fattura nella tabella 
+    //fatture del database. Se l'inserimento va a buon fine ritorna true
+    //altrimenti un messaggio di errore
+    public function newInvoice($value){
+        global $connection;
+        $idClient = $value['cod_client'];
+        $paymentType = $value['payment_type'];
+        $date = date('Y-m-d');
+        $tot = mysqli_fetch_array(mysqli_query($connection,"SELECT sum(costo)AS totale FROM operazioni WHERE id_fattura IS NULL AND id_cliente='$idClient'"));
+        $tot_def = $tot['totale']; 
+        $iva = ($tot_def /100) *22;  
+        $totIvato = $tot_def + $iva;
+        $id_fattura = rand();
+        $query = mysqli_query($connection,"INSERT INTO fatture(id_fattura,tipo_pagamento, data_emissione, totale, totale_ivato) "
+                . "values ('$id_fattura', '$paymentType', '$date', $tot_def , $totIvato)");
+        $query_agg = mysqli_query($connection, "UPDATE operazioni set id_fattura='$id_fattura' WHERE id_cliente='$idClient' AND id_fattura IS NULL");
+        if (!$query) {
+            die("Errore di creazione fattura: " . mysqli_error($connection));
+        } else if (!$query_agg){
+            die ("Errore di aggiornamento fattura :" . mysqli_error($connection));
+        }else {
+            return true;
+        }
+    }
+    //metodo che esegue la query che ritorna le fatture del database oppure un 
+    //messaggio se la query non produce nessun risultato
+     public function getInvoice() {
+        $ret = "NON CI SONO FATTURE";
+        global $connection;
+        $query = mysqli_query($connection,("SELECT * FROM fatture"));
+        if (!$query) {
+            die("Errore nella query getInvoice: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query,MYSQLI_ASSOC);  
+        }
+        return $ret;
+    }
+
     //metodo che esegue la query per l'inserimento di un nuovo cliente nella
     //tabella clienti del database. Se l'inserimento va a buon fine ritorna
     //true altrimenti un messaggio di errore

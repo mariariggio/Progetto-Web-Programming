@@ -1,6 +1,6 @@
 //variabili utilizzate per la cencellazione degli elementi.
 var id;
-var menuType;
+var menuType = null;
 
 $("a.menuor").focus(function () {
     $("#post").text("");
@@ -247,6 +247,13 @@ function makeResponse(arr) {
         addOperationForm(response.clienti, response.manodopera, response.articoli);
     } else if (response.operation === "addOperation") {
         makeOperationTable(response.value);
+    } else if(response.operation === "newFattura"){
+        if (response.value === true){
+            alert("Fattura creata con successo!");
+        }
+    } else if (response.operation === "closeOperationForm") {
+        $("#operationFormDialog").html(makeFormFattura(response.value));
+        $("#operationFormDialog").dialog("open");
     } else if (response.operation === "showClient") {
         makeClientsTable(response.value);
     } else if (response.operation === "showOperation") {
@@ -255,6 +262,8 @@ function makeResponse(arr) {
         makeSupplierTable(response.value);
     } else if (response.operation === "showArticle") {
         makeArticlesTable(response.value);
+    } else if (response.operation === "showInvoice"){
+        makeInvoiceTable(response.value);
     } else if (response.operation === "modClient") {
         makeClientsTable(response.value);
     } else if (response.operation === "modArticle") {
@@ -289,7 +298,7 @@ $(function () {
     }
     $(document).on('click', '.delete', function () {
         id = $(this).attr("id");
-        $("#dialogEl").html("<p> Sei sicuro di voler eliminare l'elemento:<br>"+ id +"?</p>");
+        $("#dialogEl").html("<p> Sei sicuro di voler eliminare l'elemento:<br>" + id + "?</p>");
         //$("#msg").text(id + "?");
         $("#dialogEl").dialog("open");
     });
@@ -532,6 +541,32 @@ function modArticle(i) {
             "</fieldset></form>";
     return out;
 }
+//metodo responsabile della generazione della tabella delle fatture,i dati 
+//passati in input provengono da una query fatta al database, se questa non
+//produce nessun risultato ciï¿½ verrï¿½ notificato come risultato.
+function makeInvoiceTable(response) {
+    if (response === "NON CI SONO FATTURE") {
+        out = "Non sono ancora state fatturate operazioni.";
+    } else {
+        out = "<div class='outText'>Id Fattura</div>";
+        out += "<div class='outText'>Tipo Pagamento</div>";
+        out += "<div class='outText'>Data Emissione</div>";
+        out += "<div class='outText'>Totale</div>";
+        out += "<div class='outText'>Totale + Iva</div>";
+        out += "<div class='row'></div>";
+        for (i = 0; i < response.length; i++) {
+            out += "<div class='outText'>" + response[i].id_fattura + "</div>" +
+                    "<div class='outText'>" + response[i].tipo_pagamento + "</div>" +
+                    "<div class='outText'>" + response[i].data_emissione + "</div>" +
+                    "<div class='outText'>" + response[i].totale + "</div>" +
+                    "<div class='outText'>" + response[i].totale_ivato + "</div>" +
+                    "<div class='out'>" +
+                    "<button id='" + response[i].id_fattura+ "' class='print'><i class='fa fa-print fa-lg' aria-hidden='true'></i></button>" +
+                    "</div><div class='row'></div>";
+        }
+    }
+    $("#post").html(out);
+}
 //metodo responsabile della generazione della tabella dei fornitori, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
 //risultato ciò verrà notificato come risultato.
@@ -582,7 +617,7 @@ $(function () {
                 "citta": x.citta.value,
                 "provincia": x.provincia.value
             };
-            ////Converto l'oggetto Json in stringa per inviarlo al server.
+            //Converto l'oggetto Json in stringa per inviarlo al server.
             req = JSON.stringify(request);
             ajaxEvent(req);
             $("#dialogModSupplier").dialog("close");
@@ -676,6 +711,79 @@ function addOperationForm(clienti, manodopera, articoli) {
         out += "<div class='row'></div></form>";
     }
     $("#post").html(out);
+}
+//Gestione della finestra di dialogo per la conclusione di un operazione.
+$(function () {
+     //Creo il  Json da inviare al server per la creazione del form per la conclusione
+    // delle operazioni.
+    function concludiOperation() {
+        request = {
+            "operation": "closeOperationForm"
+        };
+        //Converto l'oggetto Json in stringa per inviarlo al server.
+        req = JSON.stringify(request);
+        ajaxEvent(req);
+    }
+    $("#operationFormDialog").dialog({
+        autoOpen: false,
+        height: 250,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Salva": datiFattura,
+            "Annulla": function () {
+                $("#operationFormDialog").dialog("close");
+            }
+        }
+    });
+    //Raccoglie dal form i dati per la creazione di una nuova fattura. Viene 
+    //creato il Json  e inviato al server.
+    function datiFattura() {
+        var request;
+        var x = document.forms['formInvoice'];
+        //Controllo se tutti i campi sono stati compilati
+        if (x.client.value === "null" || x.payment.value === "null") {
+            alert("Non sono stati riempiti tutti i campi");
+        } else {
+            //Creo l'oggetto Json
+            request = {
+                "operation": "newFattura",
+                "cod_client": x.client.value,
+                "payment_type": x.payment.value
+            };
+            //Converto l'oggetto Json in stringa per inviarlo al server.
+            req = JSON.stringify(request);
+            ajaxEvent(req);
+            $("#operationFormDialog").dialog("close");
+        }
+    }
+    $(document).on('click', '.concludiOperation', function () {
+        concludiOperation();    
+    });
+});
+function makeFormFattura(response) {
+    if (response === "NON CI SONO OPERAZIONI IN CORSO"){
+        out=response;
+    } else {
+        //genero il menu dei clienti
+        client = "<select id=text name='client'><option value=null>---</option>";
+        for (i = 0; i < response.length; i++) {
+            client += "<option value=" + response[i].id_cliente + ">" + response[i].id_cliente + "</option>";
+        }
+        client += "</select>";
+    out = "<form name='formInvoice'>" +
+            "<fieldset>" +
+            "<label for='client'>*Selezionare il cliente da fatturare:</label>" + client +
+             "<label for='payment'>*Selezionare il tipo di pagamento:</label>" +
+             "<select id=text name='payment'><option value=null> ---</option>" +
+             "<option value=Bancomat>Bancomat</option>" +
+             "<option value='Carta Di Credito'>Carta di Credito</option>" +
+             "<option value=Contanti>Contanti</option>" +
+            //Allow form submission with keyboard without duplicating the dialog button
+            "<input type='submit' tabindex='-1' style='position:absolute; top:-1000px'>" +
+            "</fieldset></form>";
+    }
+    return out;
 }
 //metodo responsabile della generazione della tabella delle operazioni,i dati 
 //passati in input provengono da una query fatta al database, se questa non

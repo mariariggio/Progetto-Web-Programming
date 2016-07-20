@@ -31,6 +31,10 @@ class FrameWork {
             return $this->addArticle($request);
         } else if ($request['operation']== "addSupplier"){
             return $this->addSupplier($request);
+        } else if ($request['operation']== "closeOperationForm"){
+            return $this->closeOperationForm();
+        }else if ($request['operation']=="newFattura"){
+            return $this->newFattura($request);
         } else if($request['operation'] == "show" && $request['menu'] == "Client"){
             return $this->getClients();
         } else if ($request['operation'] == "show" && $request['menu'] == "Operation"){
@@ -43,7 +47,9 @@ class FrameWork {
             return $this->Magazzino("E");
         } else if ($request['operation'] == "show" && $request['menu'] == "inEs"){
             return $this->Magazzino("EF");
-        } else if ($request['operation'] == "del" && $request['menu'] == "client"){
+        } else if ($request['operation'] == "show" && $request['menu'] == "Invoice"){
+            return $this->getInvoice();
+        }else if ($request['operation'] == "del" && $request['menu'] == "client"){
             return $this->delClient($request);
         } else if ($request['operation'] == "del" && $request['menu'] == "article"){
             return $this->delArticle($request);
@@ -85,6 +91,34 @@ class FrameWork {
     private function getOperations(){
         $result['operation'] = "showOperation";
         $result['value'] = $this->db->getOperation();
+        $ret = json_encode($result);
+        return $ret;
+    }
+    //metodo responsabile della creazione del form per la conclusione di una 
+    //operazione. Chiama un metodo della classe UseDb che restituisce i clienti
+    //che hanno richiesto prestazioni.
+    private function closeOperationForm(){
+       $result['operation'] = "closeOperationForm";
+        $result['value'] = $this->db->getForFattura();
+        $ret = json_encode($result);
+        return $ret; 
+    }
+    //metodo responsabile della creazione della fattura.Chiama un 
+    //metodo della classe UdeDb e se il risultato � positivo ritorna la pagina 
+    //delle fatture.
+    private function newFattura($request){
+        $messagge = $this->db->newInvoice($request);
+        if(is_bool($messagge)){
+            $result['operation'] = "newFattura";
+            $result['value'] = true;
+            $ret = json_encode($result);
+            return $ret;
+        } 
+    }
+    //Ritorna la pagina con le fatture
+    private function getInvoice(){
+        $result['operation'] = "showInvoice";
+        $result['value'] = $this->db->getInvoice();
         $ret = json_encode($result);
         return $ret;
     }

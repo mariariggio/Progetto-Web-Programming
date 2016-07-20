@@ -48,6 +48,8 @@
                 <div id="post" class="post">
                     <p></p>	     
                 </div>
+                <div id="operationFormDialog" title="Concludi Operazione">        
+                </div>
                 <div id="dialogEl" title="Conferma Eliminazione">        
                 </div>
                 <div id="dialogModClient" title="Modifica Cliente">              
@@ -74,7 +76,7 @@
             $("#operation").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li>\n\
                     <li><a href=# onclick=show('Operation')>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
-                    <li><a href=# onclick=concludiOperation()>Concludi</a></li>");
+                    <li><a href=# class='concludiOperation'>Concludi</a></li>");
             });
             $("#client").click(function () {       
                 $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li>\n\
@@ -87,7 +89,7 @@
                     <li><a href=# onclick=show('inEs')>...in esaurimento<ul id=show_op_art3></ul></a></li>");
             });
             $("#invoice").click(function () {      
-                $("#leftMenu").html("<li><a href=# onclick=showInvoice()>Mostra Fatture<ul id=show_invoice></ul></a></li>");
+                $("#leftMenu").html("<li><a href=# onclick=show('Invoice')>Mostra Fatture<ul id=show_invoice></ul></a></li>");
             });
             $("#supplier").click(function () {        
                 $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li>\n\
