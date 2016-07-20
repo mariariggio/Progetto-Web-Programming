@@ -270,6 +270,16 @@ function makeResponse(arr) {
         makeArticlesTable(response.value);
     } else if (response.operation === "modSupplier") {
         makeSupplierTable(response.value);
+    } else if (response.operation === "searchArticle") {
+        makeArticlesTable(response.value);
+    } else if (response.operation === "searchClient"){
+        makeClientsTable(response.value);
+    } else if (response.operation === "searchOperation"){
+        makeOperationTable(response.value);
+    } else if (response.operation === "searchInvoice"){
+        makeInvoiceTable(response.value);
+    } else if (response.operation === "searchSupplier"){
+        makeSupplierTable(response.value);
     }
 }
 //Gestione della finestra di dialogo per la cancellazione.
@@ -543,7 +553,7 @@ function modArticle(i) {
 }
 //metodo responsabile della generazione della tabella delle fatture,i dati 
 //passati in input provengono da una query fatta al database, se questa non
-//produce nessun risultato ciï¿½ verrï¿½ notificato come risultato.
+//produce nessun risultato ciò verrà notificato come risultato.
 function makeInvoiceTable(response) {
     if (response === "NON CI SONO FATTURE") {
         out = "Non sono ancora state fatturate operazioni.";
@@ -813,4 +823,27 @@ function makeOperationTable(response) {
         }
     }
     $("#post").html(out);
+}
+//Invia il Json al server che contiene la chiave di ricerca e il menu interessato.
+function searchJson() {
+    var request;
+    if (menuType !== null) {
+        var keyword = $("#search-text").val();
+        request = {
+            "operation": "search",
+            "keyword": keyword,
+            "menu": menuType
+        };
+        //Converto l'oggetto Json in stringa per inviarlo al server.
+        req = JSON.stringify(request);
+        ajaxEvent(req);
+    } else {
+        alert("Nessun menu selezionato ");
+
+    }
+    this.emptySearch();
+}
+//Ad ogni ricerca questa funzione pulisce il campo search.
+function emptySearch() {
+    document.getElementById('search-text').value = "";
 }

@@ -61,6 +61,8 @@ class FrameWork {
             return $this->modArticle($request);
         } else if ($request['operation'] == "modSupplier"){
             return $this->modSupplier($request);
+        } else if ($request['operation'] == "search"){
+            return $this->search($request);
         }
     }
     
@@ -104,7 +106,7 @@ class FrameWork {
         return $ret; 
     }
     //metodo responsabile della creazione della fattura.Chiama un 
-    //metodo della classe UdeDb e se il risultato ï¿½ positivo ritorna la pagina 
+    //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
     //delle fatture.
     private function newFattura($request){
         $messagge = $this->db->newInvoice($request);
@@ -259,6 +261,33 @@ class FrameWork {
             return $this->getSupplier();
         }
     }
+    //metodo responsabile della ricerca. Prende in input l'array
+    //che contiene la chiave di ricerca e il menu interessato dalla ricerca e
+    //restituisce il risultato della ricerca.
+    private function search($request){
+        if($request['menu'] == "article"){
+           $data= $this->db->searchArticle($request['keyword']);
+           $result['operation'] = "searchArticle";
+           $result['value'] = $data;
+        } else if($request['menu'] == "client"){ 
+            $data= $this->db->searchClient($request['keyword']);
+            $result['operation'] = "searchClient";
+            $result['value'] = $data;
+        }else if($request['menu'] == "operation"){
+            $data= $this->db->searchOperation($request['keyword']);
+            $result['operation'] = "searchOperation";
+            $result['value'] = $data;
+        }else if($request['menu'] == "invoice"){
+            $data= $this->db->searchInvoice($request['keyword']);
+            $result['operation'] = "searchInvoice";
+            $result['value'] = $data;
+        }else if ($request['menu'] == "supplier"){
+            $data= $this->db->searchSupplier($request['keyword']);
+            $result['operation'] = "searchSupplier";
+            $result['value'] = $data;
+        }
+        $ret = json_encode($result);
+        return $ret;
+    }
 }
-
 ?>
