@@ -72,7 +72,7 @@ class UseDb {
     public function getOperation() {
         $ret = "NON CI SONO OPERAZIONI";
         global $connection;
-        $query = mysqli_query($connection, ("SELECT * FROM operazioni"));
+        $query = mysqli_query($connection, ("SELECT * FROM operazioni WHERE id_fattura IS NULL"));
         if (!$query) {
             die("Errore nella query getOperation: " . mysqli_error($connection));
         } else if (mysqli_num_rows($query) > 0) {

@@ -33,10 +33,6 @@
             <div id="sidebar">
                 <ul>
                     <li>
-                        <h2>help Center</h2>
-                        <p id="help"> </p>
-                    </li>
-                    <li>
                         <h2>Avanzate</h2>
                         <ul id="leftMenu">
                         </ul>
@@ -64,34 +60,49 @@
         <!-- end #page -->
         
         <script>  
-        
-            $("a.menuor").focus(function () {
+       
+        function changeColor() {
+                var lista = ["operation", "client", "article", "invoice", "supplier"];
+                for (i = 0; i < lista.length; i++) {
+                    var stringa = lista[i];               
+                    if (lista[i] === menuType) {
+                       $("#post").text("");
+                       $("#" + menuType).css("background-color", "#4CAF50");
+                    } else {
+                        $("#" + stringa).css("background-color", "#5f5f5f");
+                    }
+                }
+            }
+            $("#operation").click(function () { 
                 menuType = $(this).attr("id");
-                $("#post").text("");
-                $(this).css("background-color", "#4CAF50");
-            });
-            $("a.menuor").blur(function () {
-                $(this).css("background-color", "#5f5f5f");
-            });
-            $("#operation").click(function () {       
+                changeColor();
                 $("#leftMenu").html("<li><a href=# onclick=addOperation()>Aggiungi Operazione</a></li>\n\
-                    <li><a href=# onclick=show('Operation')>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
+                    <li><a href=# id='showOp' onclick=show('Operation')>Mostra Operazioni<ul id='show_operation'></ul></a></li>\n\
                     <li><a href=# class='concludiOperation'>Concludi</a></li>");
             });
-            $("#client").click(function () {       
+            
+            $("#client").click(function () { 
+                menuType = $(this).attr("id");
+                changeColor();
                 $("#leftMenu").html("<li><a href=# onclick=addClient()>Aggiungi Cliente</a></li>\n\
                     <li><a href=# onclick=show('Client')>Mostra Clienti<ul id='show_client'></ul></a></li>");
             });
-            $("#article").click(function () {         
+            $("#article").click(function () {
+                menuType = $(this).attr("id");
+                changeColor();
                 $("#leftMenu").html("<li><a href=# onclick=addArticle()>Aggiungi Articolo</a></li>\n\
                     <li><a href=# onclick=show('inM')>...in magazzino<ul id=show_op_art1></ul></a></li>\n\
                     <li><a href=# onclick=show('nInM')>...non in magazzino<ul id=show_op_art2></ul></a></li>\n\
                     <li><a href=# onclick=show('inEs')>...in esaurimento<ul id=show_op_art3></ul></a></li>");
             });
-            $("#invoice").click(function () {      
+            $("#invoice").click(function () { 
+                menuType = $(this).attr("id");
+                changeColor();
                 $("#leftMenu").html("<li><a href=# onclick=show('Invoice')>Mostra Fatture<ul id=show_invoice></ul></a></li>");
             });
-            $("#supplier").click(function () {        
+            $("#supplier").click(function () {   
+                menuType = $(this).attr("id");
+                changeColor();
                 $("#leftMenu").html("<li><a href=# onclick=addSupplier()>Aggiungi Fornitore</a></li>\n\
                     <li><a href=# onclick=show('Supplier')>Mostra Fornitore<ul id='show_supplier'></ul></a></li>");
             });

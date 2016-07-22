@@ -2,13 +2,6 @@
 var id;
 var menuType = null;
 
-$("a.menuor").focus(function () {
-    $("#post").text("");
-    $(this).css("background-color", "#4CAF50");
-});
-$("a.menuor").blur(function () {
-    $(this).css("background-color", "#5f5f5f");
-});
 //Creo il  Json da inviare al server per la creazione del form per l'inserimento
 // di un nuova operazione.
 function addOperation() {
@@ -19,9 +12,7 @@ function addOperation() {
     req = JSON.stringify(request);
     ajaxEvent(req);
 }
-function showOperation() {
-    $("#show_operation").html("<li><a href=# onclick=modOperation()>Modifica Operazione</a></li><li><a href=# onclick=delOperation()>Elimina Operazioni</a></li>");
-}
+
 //funzione che crea il form per l'inserimento di un nuovo cliente
 function addClient() {
     s = "<form name='addClient'>";
@@ -45,9 +36,7 @@ function addClient() {
     s += "<div class='row'></div></form>";
     $("#post").html(s);
 }
-function showClient() {
-    $("#show_client").html("<br><li><a href=# onclick=modClient()>Modifica Cliente</a></li><li><a href=# onclick=delClient()>Elimina Cliente</a></li>");
-}
+
 //Creo il  Json da inviare al server per la creazione del form per l'inserimento
 // di un nuovo articolo.
 function addArticle() {
@@ -58,18 +47,7 @@ function addArticle() {
     req = JSON.stringify(request);
     ajaxEvent(req);
 }
-function inMagazzino() {
-    $("#show_op_art1").html("<li><a href=# onclick=modarticle()>Modifica articolo</a></li><li><a href=# onclick=delArticle()>Elimina Articolo</a></li>");
-}
-function nonMagazzino() {
-    $("#show_op_art2").html("<li><a href=# onclick=modarticle()>Modifica articolo</a></li><li><a href=# onclick=delArticle()>Elimina Articolo</a></li>");
-}
-function inEsaurimento() {
-    $("#show_op_art3").html("<li><a href=# onclick=modarticle()>Modifica articolo</a></li><li><a href=# onclick=delarticle()>Elimina Articolo</a></li>");
-}
-function showInvoice() {
-    $("#show_invoice").html("<li><a href=# onclick=printInvoice()>Stampa Fattura</a></li>");
-}
+
 //funzione che crea il form per l'insermento di un nuovo fornitore.
 function addSupplier() {
     s = "<form name='addSupplier'>";
@@ -91,9 +69,7 @@ function addSupplier() {
     s += "<div class='row'></div></form>";
     $("#post").html(s);
 }
-function showSupplier() {
-    $("#show_supplier").html("<li><a href=# onclick=modSupplier()>Modifica Fornitore</a></li><li><a href=# onclick=delSupplier()>Elimina Fornitore</a></li>");
-}
+
 function makeAddOperationJson() {
     var request;
     var x = document.forms['addOperation'];
@@ -389,7 +365,9 @@ function modClient(i) {
 function makeClientsTable(response) {
     if (response === "NON CI SONO CLIENTI") {
         out = "Non ci sono Clienti!";
-    } else {
+    } else if (response === "NESSUN RISULTATO"){
+        out = "Nessuna corrispondenza trovata!";
+    }else {
         out = "<div class='outText'><h>Codice Fiscale</h></div>";
         out += "<div class='outText'><h>Nome</h></div>";
         out += "<div class='outText'><h>Cognome</h></div>";
@@ -456,6 +434,8 @@ function addArticleForm(supplier) {
 function makeArticlesTable(response) {
     if (response === "NON CI SONO ARTICOLI") {
         out = "Non ci sono Articoli!";
+    } else if (response === "NESSUN RISULTATO"){
+        out = "Nessuna corrispondenza trovata!";
     } else {
         out = "<div class='outText'>Codice Articolo</div>";
         out += "<div class='outText'>Categoria</div>";
@@ -557,6 +537,8 @@ function modArticle(i) {
 function makeInvoiceTable(response) {
     if (response === "NON CI SONO FATTURE") {
         out = "Non sono ancora state fatturate operazioni.";
+    } else if (response === "NESSUN RISULTATO"){
+        out = "Nessuna corrispondenza trovata!";
     } else {
         out = "<div class='outText'>Id Fattura</div>";
         out += "<div class='outText'>Tipo Pagamento</div>";
@@ -800,7 +782,9 @@ function makeFormFattura(response) {
 // produce nessun risultato ciò verrà notificato come risultato.
 function makeOperationTable(response) {
     if (response === "NON CI SONO OPERAZIONI") {
-        out = "Non sono ancora state inserite operazioni";
+        out = "Non ci sono operazioni in corso.";
+    } else if (response === "NESSUN RISULTATO"){
+        out = "Nessuna corrispondenza trovata!";
     } else {
         out = "<div class='outText'>Id Operazione</div>";
         out += "<div class='outText'>Id Cliente</div>";
@@ -827,8 +811,12 @@ function makeOperationTable(response) {
 //Invia il Json al server che contiene la chiave di ricerca e il menu interessato.
 function searchJson() {
     var request;
+    var keyword = $("#search-text").val();
+    if(keyword === ""){
+        alert("Inserire una chiave di ricerca.");
+    } else {
     if (menuType !== null) {
-        var keyword = $("#search-text").val();
+        
         request = {
             "operation": "search",
             "keyword": keyword,
@@ -842,6 +830,7 @@ function searchJson() {
 
     }
     this.emptySearch();
+    }
 }
 //Ad ogni ricerca questa funzione pulisce il campo search.
 function emptySearch() {
