@@ -145,7 +145,30 @@ class UseDb {
         }
         return $ret;
     }
-   public function searchInvoice($key) {
+    //Variazione del metodo precedente che prende in input l'id della fattura da
+    //selezionare.
+    public function getInvoicePrint($key){
+        $ret = "NON CI SONO FATTURE";
+        global $connection;
+        $query = mysqli_query($connection, ("SELECT * FROM fatture WHERE id_fattura='$key'"));
+        if (!$query) {
+            die("Errore nella query getInvoice: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        }
+        return $ret; 
+    }
+    public function clientForFattura($key){
+        global $connection;
+        $query = mysqli_query($connection, ("SELECT distinct * FROM clienti JOIN operazioni ON cf=id_cliente WHERE id_fattura='$key'"));
+        if (!$query) {
+            die("Errore nella query clientForFattura: " . mysqli_error($connection));
+        } else if (mysqli_num_rows($query) > 0) {
+            $ret = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        }
+        return $ret; 
+    }
+    public function searchInvoice($key) {
         $ret = "NESSUN RISULTATO";
         global $connection;
         $query = mysqli_query($connection, ("SELECT * FROM fatture WHERE id_fattura LIKE '%$key%' OR tipo_pagamento LIKE '%$key%' OR data_emissione LIKE '%$key%' OR totale LIKE '%$key%' OR totale_ivato LIKE '%$key%'"));
@@ -212,12 +235,12 @@ class UseDb {
     }
 
     //metodo che esegue la query che elimina il cliente dal database. Prende in
-    //imput il codice fiscale del cliente e se la cancellazione va a buon fine 
-    //ritorna true
+    //imput il codice fiscale del cliente e lo elimina se questo non ha mai 
+    //richiesto nessuna prestazione. In questo caso ritorna true.
     public function delClient($value) {
         $cf = $value['id'];
         global $connection;
-        $query = mysqli_query($connection, "DELETE FROM clienti WHERE cf='$cf'");
+        $query = mysqli_query($connection, "DELETE clienti.* FROM clienti LEFT JOIN operazioni ON clienti.cf=operazioni.id_cliente WHERE clienti.cf='$cf' AND operazioni.id_cliente IS NULL");
         if (!$query) {
             die("Errore nella cancellazione del cliente: " . mysqli_error($connection));
         } else {
@@ -299,7 +322,7 @@ class UseDb {
     public function delArticle($value) {
         $codice = $value['id'];
         global $connection;
-        $query = mysqli_query($connection, "DELETE FROM articoli WHERE codice='$codice'");
+        $query = mysqli_query($connection,"DELETE articoli.* FROM articoli LEFT JOIN operazioni ON articoli.codice=operazioni.id_articolo WHERE articoli.codice='$codice' AND operazioni.id_articolo IS NULL");
         if (!$query) {
             die("Errore nella cancellazione dell'articolo: " . mysqli_error($connection));
         } else {
@@ -398,7 +421,7 @@ class UseDb {
     public function delSupplier($value) {
         $piva = $value['id'];
         global $connection;
-        $query = mysqli_query($connection, "DELETE FROM fornitori WHERE piva='$piva'");
+        $query = mysqli_query($connection, "DELETE fornitori.* FROM fornitori LEFT JOIN articoli ON fornitori.piva=articoli.cod_fornitore WHERE fornitori.piva='$piva' AND articoli.cod_fornitore IS NULL");
         if (!$query) {
             die("Errore nella cancellazione dell'articolo: " . mysqli_error($connection));
         } else {

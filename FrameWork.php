@@ -35,6 +35,8 @@ class FrameWork {
             return $this->closeOperationForm();
         }else if ($request['operation']=="newFattura"){
             return $this->newFattura($request);
+        } else if($request['operation']=="requestDataPrint"){
+            return $this->getInvoicePrint($request);
         } else if($request['operation'] == "show" && $request['menu'] == "Client"){
             return $this->getClients();
         } else if ($request['operation'] == "show" && $request['menu'] == "Operation"){
@@ -78,8 +80,8 @@ class FrameWork {
         return $ret;
     }
     //Metodo che si occupa dell'inserimento di una nuova operazione. Chiama un 
-    //metodo della classe UdeDb e se il risultato è positivo ritorna la tabella 
-    //con i clienti.
+    //metodo della classe UdeDb e se il risultato è positivo ritorna l'elenco 
+    //dei clienti.
     private function addOperation($request){
         $messagge = $this->db->newOperation($request);
         if(!is_string($messagge)){
@@ -124,6 +126,16 @@ class FrameWork {
         $ret = json_encode($result);
         return $ret;
     }
+    private function getInvoicePrint($request){
+        $key=$request['id_fattura'];
+        $result['operation'] = "printInvoice";
+        $result['fatture'] = $this->db->getInvoicePrint($key);
+        $result['cliente'] = $this->db->clientForFattura($key);
+       
+        $ret = json_encode($result);
+        return $ret;
+    }
+    
     //Metodo che si occupa dell'inserimento di un nuovo cliente. Chiama un 
     //metodo della classe UdeDb e se il risultato è positivo ritorna la pagina 
     //dei clienti.

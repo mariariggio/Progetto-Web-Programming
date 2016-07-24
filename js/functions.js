@@ -223,10 +223,12 @@ function makeResponse(arr) {
         addOperationForm(response.clienti, response.manodopera, response.articoli);
     } else if (response.operation === "addOperation") {
         makeOperationTable(response.value);
-    } else if(response.operation === "newFattura"){
-        if (response.value === true){
+    } else if (response.operation === "newFattura") {
+        if (response.value === true) {
             alert("Fattura creata con successo!");
         }
+    } else if (response.operation === "printInvoice") {
+        printDialog(makePrintPage(response.fatture, response.cliente));
     } else if (response.operation === "closeOperationForm") {
         $("#operationFormDialog").html(makeFormFattura(response.value));
         $("#operationFormDialog").dialog("open");
@@ -238,7 +240,7 @@ function makeResponse(arr) {
         makeSupplierTable(response.value);
     } else if (response.operation === "showArticle") {
         makeArticlesTable(response.value);
-    } else if (response.operation === "showInvoice"){
+    } else if (response.operation === "showInvoice") {
         makeInvoiceTable(response.value);
     } else if (response.operation === "modClient") {
         makeClientsTable(response.value);
@@ -248,13 +250,13 @@ function makeResponse(arr) {
         makeSupplierTable(response.value);
     } else if (response.operation === "searchArticle") {
         makeArticlesTable(response.value);
-    } else if (response.operation === "searchClient"){
+    } else if (response.operation === "searchClient") {
         makeClientsTable(response.value);
-    } else if (response.operation === "searchOperation"){
+    } else if (response.operation === "searchOperation") {
         makeOperationTable(response.value);
-    } else if (response.operation === "searchInvoice"){
+    } else if (response.operation === "searchInvoice") {
         makeInvoiceTable(response.value);
-    } else if (response.operation === "searchSupplier"){
+    } else if (response.operation === "searchSupplier") {
         makeSupplierTable(response.value);
     }
 }
@@ -365,9 +367,9 @@ function modClient(i) {
 function makeClientsTable(response) {
     if (response === "NON CI SONO CLIENTI") {
         out = "Non ci sono Clienti!";
-    } else if (response === "NESSUN RISULTATO"){
+    } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
-    }else {
+    } else {
         out = "<div class='outText'><h>Codice Fiscale</h></div>";
         out += "<div class='outText'><h>Nome</h></div>";
         out += "<div class='outText'><h>Cognome</h></div>";
@@ -434,16 +436,16 @@ function addArticleForm(supplier) {
 function makeArticlesTable(response) {
     if (response === "NON CI SONO ARTICOLI") {
         out = "Non ci sono Articoli!";
-    } else if (response === "NESSUN RISULTATO"){
+    } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'>Codice Articolo</div>";
-        out += "<div class='outText'>Categoria</div>";
-        out += "<div class='outText'>Descrizione</div>";
-        out += "<div class='outText'>Quantit&#224</div>";
-        out += "<div class='outText'>Prezzo Acquisto</div>";
-        out += "<div class='outText'>Prezzo Vendita</div>";
-        out += "<div class='outText'>Codice Fornitore</div>";
+        out = "<div class='outText'><h>Codice Articolo</h></div>";
+        out += "<div class='outText'><h>Categoria</h></div>";
+        out += "<div class='outText'><h>Descrizione</h></div>";
+        out += "<div class='outText'><h>Quantit&#224</h></div>";
+        out += "<div class='outText'><h>Prezzo Acquisto</h></div>";
+        out += "<div class='outText'><h>Prezzo Vendita</h></div>";
+        out += "<div class='outText'><h>Codice Fornitore</h></div>";
         out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
             out += "<div id='codice" + i + "' class='outText'>" + response[i].codice + "</div>" +
@@ -537,14 +539,14 @@ function modArticle(i) {
 function makeInvoiceTable(response) {
     if (response === "NON CI SONO FATTURE") {
         out = "Non sono ancora state fatturate operazioni.";
-    } else if (response === "NESSUN RISULTATO"){
+    } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'>Id Fattura</div>";
-        out += "<div class='outText'>Tipo Pagamento</div>";
-        out += "<div class='outText'>Data Emissione</div>";
-        out += "<div class='outText'>Totale</div>";
-        out += "<div class='outText'>Totale + Iva</div>";
+        out = "<div class='outText'><h>Id Fattura</h></div>";
+        out += "<div class='outText'><h>Tipo Pagamento</h></div>";
+        out += "<div class='outText'><h>Data Emissione</h></div>";
+        out += "<div class='outText'><h>Totale</h></div>";
+        out += "<div class='outText'><h>Totale + Iva</h></div>";
         out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
             out += "<div class='outText'>" + response[i].id_fattura + "</div>" +
@@ -553,11 +555,63 @@ function makeInvoiceTable(response) {
                     "<div class='outText'>" + response[i].totale + "</div>" +
                     "<div class='outText'>" + response[i].totale_ivato + "</div>" +
                     "<div class='out'>" +
-                    "<button id='" + response[i].id_fattura+ "' class='print'><i class='fa fa-print fa-lg' aria-hidden='true'></i></button>" +
+                    "<button id='" + response[i].id_fattura + "' onclick=printInvoice(this)><i class='fa fa-print fa-lg' aria-hidden='true'></i></button>" +
                     "</div><div class='row'></div>";
         }
     }
     $("#post").html(out);
+}
+function printInvoice(element) {
+    //Recupero l'id della fattura da stampare
+    idFattura = $(element).attr("id");
+    var request = {
+        "operation": "requestDataPrint",
+        "id_fattura": idFattura
+    };
+    //Converto l'oggetto Json in stringa per inviarlo al server.
+    req = JSON.stringify(request);
+    ajaxEvent(req);
+}
+
+function makePrintPage(fattura, cliente) {
+    out = "<strong> Fattura rilasciata al Sign.:</strong><br><br>" +
+            cliente[0].nome + " " + cliente[0].cognome + "<br> " + cliente[0].cf + "<br>" +
+            cliente[0].indirizzo + "<br>" +
+            cliente[0].citta + " (" + cliente[0].provincia + ") <br>" +
+            "<br><br> <strong> Fattura n. </strong> " + fattura[0].id_fattura +
+            "<br><br> <strong> Rilasciata il: </strong>" + fattura[0].data_emissione +
+            "<br><br>" +
+            "<br><div style='float:left;width:25%;align:center;'><b>Articolo</b></div>" +
+            "<div style='float:left;width:25%;align:center;' ><b>Quantita</b></div>" +
+            "<div style='float:left;width:25%;align:center;'><b>Prestazione</b></div>" +
+            "<div style='float:left;width:25%;align:center;'><b>Prezzo</b></div>" +
+            "<div style='clear: both;'></div><br>";
+    for (i = 0; i < cliente.length; i++) {
+        out += "<div style='float:left;width:25%;align:center;'> - " + cliente[i].id_articolo + "</div>" +
+                "<div style='float:left;width:25%;align:center;'>  " + cliente[i].quantita + "</div>" +
+                "<div style='float:left;width:25%;align:center;'> - " + cliente[i].id_manodopera + "</div>" +
+                "<div style='float:left;width:25%;align:center;'> " + cliente[i].costo + " Euro</div>" +
+                "<div style='clear: both;'></div><br>";
+    }
+    out +=  "<div style='float:left;width:25%;align:center;'> -- </div>" +
+            "<div style='float:left;width:25%;align:center;'> -- </div>" +
+            "<div style='float:left;width:25%;text-align:center;'><b> Totale :   </b></div><div  style='float:left;width:25%;align:right;'> " + fattura[0].totale + " Euro</div>" +
+            "<div style='clear: both;'></div>" +
+            "<div style='float:left;width:25%;align:center;'> -- </div>" +
+            "<div style='float:left;width:25%;align:center;'> -- </div>" +
+            "<div style='float:left;width:25%;text-align:center;'><b> Totale +Iva: </b></div><div  style='float:left;width:25%;align:center;'>" + fattura[0].totale_ivato + " Euro</div>" +
+            "<div style='clear: both;'></div><br>" +
+            "<br><div style='float:left;width:25%;align:center;'><b> Metodo di Pagamento: </b></div><div  style='float:left;width:25%;align:center;'>" + fattura[0].tipo_pagamento + "</div>";
+    return out;
+}
+function printDialog(data) {
+    var w = 600;
+    var h = 500;
+    var l = Math.floor((screen.width - w) / 2);
+    var t = Math.floor((screen.height - h) / 2);
+    k = window.open("", "", "width=" + w + ", height=" + h + ",top=" + t + ",left=" + l);
+    k.document.write(data);
+    k.print();
 }
 //metodo responsabile della generazione della tabella dei fornitori, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
@@ -565,13 +619,15 @@ function makeInvoiceTable(response) {
 function makeSupplierTable(response) {
     if (response === "NON CI SONO FORNITORI") {
         out = "Non ci sono Fornitori!";
+    } else if (response === "NESSUN RISULTATO") {
+        out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'>P. Iva</div>";
-        out += "<div class='outText'>Ragione Sociale</div>";
-        out += "<div class='outText'>Cellulare</div>";
-        out += "<div class='outText'>Indirizzo</div>";
-        out += "<div class='outText'>Citt&#224</div>";
-        out += "<div class='outText'>Provincia</div>";
+        out = "<div class='outText'><h>P. Iva</h></div>";
+        out += "<div class='outText'><h>Ragione Sociale</h></div>";
+        out += "<div class='outText'><h>Cellulare</h></div>";
+        out += "<div class='outText'><h>Indirizzo</h></div>";
+        out += "<div class='outText'><h>Citt&#224</h></div>";
+        out += "<div class='outText'><h>Provincia</h></div>";
         out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
             out += "<div id='pIva" + i + "' class='outText'>" + response[i].piva + "</div>" +
@@ -706,7 +762,7 @@ function addOperationForm(clienti, manodopera, articoli) {
 }
 //Gestione della finestra di dialogo per la conclusione di un operazione.
 $(function () {
-     //Creo il  Json da inviare al server per la creazione del form per la conclusione
+    //Creo il  Json da inviare al server per la creazione del form per la conclusione
     // delle operazioni.
     function concludiOperation() {
         request = {
@@ -750,12 +806,12 @@ $(function () {
         }
     }
     $(document).on('click', '.concludiOperation', function () {
-        concludiOperation();    
+        concludiOperation();
     });
 });
 function makeFormFattura(response) {
-    if (response === "NON CI SONO OPERAZIONI IN CORSO"){
-        out=response;
+    if (response === "NON CI SONO OPERAZIONI IN CORSO") {
+        out = response;
     } else {
         //genero il menu dei clienti
         client = "<select id=text name='client'><option value=null>---</option>";
@@ -763,17 +819,17 @@ function makeFormFattura(response) {
             client += "<option value=" + response[i].id_cliente + ">" + response[i].id_cliente + "</option>";
         }
         client += "</select>";
-    out = "<form name='formInvoice'>" +
-            "<fieldset>" +
-            "<label for='client'>*Selezionare il cliente da fatturare:</label>" + client +
-             "<label for='payment'>*Selezionare il tipo di pagamento:</label>" +
-             "<select id=text name='payment'><option value=null> ---</option>" +
-             "<option value=Bancomat>Bancomat</option>" +
-             "<option value='Carta Di Credito'>Carta di Credito</option>" +
-             "<option value=Contanti>Contanti</option>" +
-            //Allow form submission with keyboard without duplicating the dialog button
-            "<input type='submit' tabindex='-1' style='position:absolute; top:-1000px'>" +
-            "</fieldset></form>";
+        out = "<form name='formInvoice'>" +
+                "<fieldset>" +
+                "<label for='client'>*Selezionare il cliente da fatturare:</label>" + client +
+                "<label for='payment'>*Selezionare il tipo di pagamento:</label>" +
+                "<select id=text name='payment'><option value=null> ---</option>" +
+                "<option value=Bancomat>Bancomat</option>" +
+                "<option value='Carta Di Credito'>Carta di Credito</option>" +
+                "<option value=Contanti>Contanti</option>" +
+                //Allow form submission with keyboard without duplicating the dialog button
+                "<input type='submit' tabindex='-1' style='position:absolute; top:-1000px'>" +
+                "</fieldset></form>";
     }
     return out;
 }
@@ -783,15 +839,15 @@ function makeFormFattura(response) {
 function makeOperationTable(response) {
     if (response === "NON CI SONO OPERAZIONI") {
         out = "Non ci sono operazioni in corso.";
-    } else if (response === "NESSUN RISULTATO"){
+    } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'>Id Operazione</div>";
-        out += "<div class='outText'>Id Cliente</div>";
-        out += "<div class='outText'>Id Articolo</div>";
-        out += "<div class='outText'>Prestazione</div>";
-        out += "<div class='outText'>Quantit&#224</div>";
-        out += "<div class='outText'>Prezzo</th></div>";
+        out = "<div class='outText'><h>Id Operazione</h></div>";
+        out += "<div class='outText'><h>Id Cliente</h></div>";
+        out += "<div class='outText'><h>Id Articolo</h></div>";
+        out += "<div class='outText'><h>Prestazione</h></div>";
+        out += "<div class='outText'><h>Quantit&#224</h></div>";
+        out += "<div class='outText'><h>Prezzo</h></div>";
         out += "<div class='row'></div>";
         for (i = 0; i < response.length; i++) {
             out += "<div class='outText'>" + response[i].id_operazione + "</div>" +
@@ -800,9 +856,6 @@ function makeOperationTable(response) {
                     "<div class='outText'>" + response[i].id_manodopera + "</div>" +
                     "<div class='outText'>" + response[i].quantita + "</div>" +
                     "<div class='outText'>" + response[i].costo + "</div>" +
-                    "<div class='out'>" +
-                    "<button id='" + response[i].id_operazione + "' class='modify'><i class='fa fa-pencil fa-lg' aria-hidden='true'></i></button>" +
-                    "<button id='" + response[i].id_operazione + "' class='delete'><i class='fa fa-trash-o fa-lg' aria-hidden='true'></i></button></div>" +
                     "<div class='row'></div>";
         }
     }
@@ -812,24 +865,24 @@ function makeOperationTable(response) {
 function searchJson() {
     var request;
     var keyword = $("#search-text").val();
-    if(keyword === ""){
+    if (keyword === "") {
         alert("Inserire una chiave di ricerca.");
     } else {
-    if (menuType !== null) {
-        
-        request = {
-            "operation": "search",
-            "keyword": keyword,
-            "menu": menuType
-        };
-        //Converto l'oggetto Json in stringa per inviarlo al server.
-        req = JSON.stringify(request);
-        ajaxEvent(req);
-    } else {
-        alert("Nessun menu selezionato ");
+        if (menuType !== null) {
 
-    }
-    this.emptySearch();
+            request = {
+                "operation": "search",
+                "keyword": keyword,
+                "menu": menuType
+            };
+            //Converto l'oggetto Json in stringa per inviarlo al server.
+            req = JSON.stringify(request);
+            ajaxEvent(req);
+        } else {
+            alert("Nessun menu selezionato ");
+
+        }
+        this.emptySearch();
     }
 }
 //Ad ogni ricerca questa funzione pulisce il campo search.

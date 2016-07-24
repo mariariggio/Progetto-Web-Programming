@@ -155,10 +155,10 @@ body {
 #sidebar h2 {
     height: 26px;
     margin: 0 0 10px 10px;
-    padding: 8px 1px 2px 10px;
+    padding: 10px 2px 2px 10px;
     background: url(../immagini/img06.png) no-repeat left top;
     text-transform: capitalize;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     color: #42423E;
 }
@@ -212,6 +212,9 @@ div.outText {
     width: 12%;
     height: 35px;   
     padding-top: 15px;   
+}
+.outText h{
+    font-weight: bold;
 }
 div.out {
     text-align: center;

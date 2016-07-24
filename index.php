@@ -1,6 +1,5 @@
 <?php
 
-//versione provvisoria per test metodi
 session_start();
 include 'FrameWork.php';
 $fw = new FrameWork();
