@@ -158,6 +158,7 @@ class UseDb {
         }
         return $ret; 
     }
+    //metodo che esegue la query che seleziona i clienti che possono essere fatturati.
     public function clientForFattura($key){
         global $connection;
         $query = mysqli_query($connection, ("SELECT distinct * FROM clienti JOIN operazioni ON cf=id_cliente WHERE id_fattura='$key'"));
@@ -168,6 +169,7 @@ class UseDb {
         }
         return $ret; 
     }
+    //metodo che effettua la query per la ricerca di una fattura.
     public function searchInvoice($key) {
         $ret = "NESSUN RISULTATO";
         global $connection;
@@ -194,7 +196,8 @@ class UseDb {
         $query = mysqli_query($connection, ("INSERT INTO clienti(cf,nome,cognome,indirizzo, cellulare, citta, provincia) 
             values('$cf', '$nome', '$cognome', '$ind', '$tel', '$citta', '$prov')"));
         if (!$query) {
-            die("Errore di inserimento: " . mysqli_error($connection));
+            $ret= "Errore di inserimento ". mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -228,7 +231,8 @@ class UseDb {
         global $connection;
         $query = mysqli_query($connection, ("UPDATE clienti SET cf='$new_cf', nome='$new_nome', cognome='$new_cognome',indirizzo='$new_indirizzo', cellulare='$new_cellulare',citta='$new_citta', provincia='$new_provincia' WHERE cf='$vecchio_cf'"));
         if (!$query) {
-            die("Errore di modifica: " . mysqli_error($connection));
+            $ret= "Errore di modifica ". mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -242,7 +246,8 @@ class UseDb {
         global $connection;
         $query = mysqli_query($connection, "DELETE clienti.* FROM clienti LEFT JOIN operazioni ON clienti.cf=operazioni.id_cliente WHERE clienti.cf='$cf' AND operazioni.id_cliente IS NULL");
         if (!$query) {
-            die("Errore nella cancellazione del cliente: " . mysqli_error($connection));
+            $ret= "Errore nella cancellazione del cliente: " . mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -276,7 +281,8 @@ class UseDb {
         $query = mysqli_query($connection, "INSERT INTO articoli(codice, categoria, descr, quantita, prezzo_acquisto, prezzo_vendita, cod_fornitore) 
                               values('$cod', '$cat', '$descr', '$quant', '$prAcq', '$prVend', '$codForn')");
         if (!$query) {
-            die("Errore di inserimento: " . mysqli_error($connection));
+            $ret= "Errore di inserimento: " . mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -310,7 +316,8 @@ class UseDb {
         global $connection;
         $query = mysqli_query($connection, ("UPDATE articoli SET codice='$new_codice', categoria='$new_categoria', descr='$new_descr',quantita='$new_quantita', prezzo_acquisto='$new_prezAcquisto', prezzo_vendita='$new_prezVendita', cod_fornitore='$new_codForn' WHERE codice='$vecchio_codice'"));
         if (!$query) {
-            die("Errore di modifica: " . mysqli_error($connection));
+            $ret = "Errore di modifica: " . mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -377,7 +384,8 @@ class UseDb {
         $query = mysqli_query($connection, ("INSERT INTO fornitori(piva, ragione_sociale,cellulare, indirizzo, citta, provincia) 
             values('$pIva', '$ragSociale', '$cell', '$ind', '$citta', '$prov')"));
         if (!$query) {
-            die("Errore di inserimento: " . mysqli_error($connection));
+            $ret ="Errore di inserimento: " . mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }
@@ -410,7 +418,8 @@ class UseDb {
         global $connection;
         $query = mysqli_query($connection, ("UPDATE fornitori SET piva='$new_pIva', ragione_sociale='$new_ragSociale', cellulare='$new_cellulare',indirizzo='$new_indirizzo',citta='$new_citta', provincia='$new_provincia' WHERE piva='$vecchia_pIva'"));
         if (!$query) {
-            die("Errore di modifica: " . mysqli_error($connection));
+            $ret ="Errore di modifica: " . mysqli_error($connection);
+            return $ret;
         } else {
             return true;
         }

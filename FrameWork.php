@@ -126,6 +126,7 @@ class FrameWork {
         $ret = json_encode($result);
         return $ret;
     }
+    //metodo che ricava le informazioni necessarie per la stampa della fattura.
     private function getInvoicePrint($request){
         $key=$request['id_fattura'];
         $result['operation'] = "printInvoice";
@@ -141,12 +142,16 @@ class FrameWork {
     //dei clienti.
     private function addClient($request){
         $messagge = $this->db->newClient($request);
+        $result['operation'] = "addClient";
         if(is_bool($messagge)){
-            $result['operation'] = "addClient";
-            $result['value'] = $this->db->getClient();
-            $ret = json_encode($result);
-            return $ret;
+            $result['message']="Inserimento effettuato correttamente!";
+            $result['value'] = $this->db->getClient();  
+        }else {
+            $result['message']=$messagge;
+            $result['value']="";
         }
+        $ret = json_encode($result);
+        return $ret;
     }
     //Ritorna la pagina con i clienti
     private function getClients(){
@@ -160,12 +165,16 @@ class FrameWork {
     //aggiornata
     private function modClient($request){
         $messagge = $this->db->modClient($request);
+        $result['operation'] = "modClient";
         if (is_bool($messagge)){
-            $result['operation'] = "modClient";
+            $result['message']="Modifica effettuata correttamente!";
             $result['value'] = $this->db->getClient();
-            $ret = json_encode($result);
-        return $ret;
+        }else {
+            $result['message']=$messagge;
+            $result['value']="";
         }
+        $ret = json_encode($result);
+        return $ret;
     }
     //metodo responsabile dell'eliminazione di un cliente. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
@@ -190,12 +199,16 @@ class FrameWork {
     //dei clienti.
     private function addArticle($request){
         $messagge = $this->db->newArticle($request);
+        $result['operation'] = "addArticle";
         if(is_bool($messagge)){
-            $result['operation'] = "addArticle";
+            $result['message']="Inserimento effettuato correttamente!";
             $result['value'] = $this->db->getArticle();
+        }else {
+            $result['message']=$messagge;
+            $result['value']="";
+        }
             $ret = json_encode($result);
             return $ret;
-        }
     }
     //Ritorna gli articoli
     private function getArticles(){
@@ -209,12 +222,17 @@ class FrameWork {
     //aggiornata
     private function modArticle($request){
         $messagge = $this->db->modArticle($request);
+        $result['operation'] = "modArticle";
         if (is_bool($messagge)){
-            $result['operation'] = "modArticle";
+            $result['message']="Modifica effettuata correttamente!";
             $result['value'] = $this->db->getArticle();
-            $ret = json_encode($result);
-        return $ret;
+        } else{
+            $result['message']=$messagge;
+            $result['value']="";
         }
+        $ret = json_encode($result);
+        return $ret;
+        
     }
     //metodo responsabile dell'eliminazione di un articolo. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
@@ -238,12 +256,17 @@ class FrameWork {
     //dei clienti.
     private function addSupplier($request){
         $messagge = $this->db->newSupplier($request);
+        $result['operation'] = "addSupplier";
         if(is_bool($messagge)){
-            $result['operation'] = "addSupplier";
+            $result['message'] = "Inserimento effettuato correttamente!";
             $result['value'] = $this->db->getSupplier();
-            $ret = json_encode($result);
-            return $ret;
-        }
+        } else {
+            $result['message']=$messagge;
+            $result['value']="";
+        } 
+        $ret = json_encode($result);
+        return $ret;
+        
     }
     //Ritorna la pagina con i clienti
     private function getSupplier(){
@@ -257,12 +280,16 @@ class FrameWork {
     //aggiornata
     private function modSupplier($request){
         $messagge = $this->db->modSupplier($request);
+        $result['operation'] = "modSupplier";
         if (is_bool($messagge)){
-            $result['operation'] = "modSupplier";
+            $result['message']="Modifica effettuata correttamente!";
             $result['value'] = $this->db->getSupplier();
-            $ret = json_encode($result);
-            return $ret;
+        } else {
+            $result['message']=$messagge;
+            $result['value']="";
         }
+        $ret = json_encode($result);
+        return $ret;
     }
     //metodo responsabile dell'eliminazione di un fornitore. Chiama un metodo della
     //classe UseDB per effettuare l'eliminazione e successivamente restituisce 
@@ -281,22 +308,27 @@ class FrameWork {
            $data= $this->db->searchArticle($request['keyword']);
            $result['operation'] = "searchArticle";
            $result['value'] = $data;
+            $result['message'] = "Elementi che corrispondono alla ricerca.";
         } else if($request['menu'] == "client"){ 
             $data= $this->db->searchClient($request['keyword']);
             $result['operation'] = "searchClient";
             $result['value'] = $data;
+            $result['message'] = "Elementi che corrispondono alla ricerca.";
         }else if($request['menu'] == "operation"){
             $data= $this->db->searchOperation($request['keyword']);
             $result['operation'] = "searchOperation";
             $result['value'] = $data;
+             $result['message'] = "Elementi che corrispondono alla ricerca.";
         }else if($request['menu'] == "invoice"){
             $data= $this->db->searchInvoice($request['keyword']);
             $result['operation'] = "searchInvoice";
             $result['value'] = $data;
+             $result['message'] = "Elementi che corrispondono alla ricerca.";
         }else if ($request['menu'] == "supplier"){
             $data= $this->db->searchSupplier($request['keyword']);
             $result['operation'] = "searchSupplier";
             $result['value'] = $data;
+            $result['message'] = "Elementi che corrispondono alla ricerca.";
         }
         $ret = json_encode($result);
         return $ret;

@@ -212,13 +212,13 @@ function ajaxEvent(data) {
 function makeResponse(arr) {
     var response = JSON.parse(arr);
     if (response.operation === "addClient") {
-        makeClientsTable(response.value);
+        makeClientsTable(response.value, response.message);
     } else if (response.operation === "addSupplier") {
-        makeSupplierTable(response.value);
+        makeSupplierTable(response.value, response.message);
     } else if (response.operation === "addArticleForm") {
         addArticleForm(response.value);
     } else if (response.operation === "addArticle") {
-        makeArticlesTable(response.value);
+        makeArticlesTable(response.value, response.message);
     } else if (response.operation === "addOperationForm") {
         addOperationForm(response.clienti, response.manodopera, response.articoli);
     } else if (response.operation === "addOperation") {
@@ -233,31 +233,31 @@ function makeResponse(arr) {
         $("#operationFormDialog").html(makeFormFattura(response.value));
         $("#operationFormDialog").dialog("open");
     } else if (response.operation === "showClient") {
-        makeClientsTable(response.value);
+        makeClientsTable(response.value, " ");
     } else if (response.operation === "showOperation") {
-        makeOperationTable(response.value);
+        makeOperationTable(response.value, " ");
     } else if (response.operation === "showSupplier") {
-        makeSupplierTable(response.value);
+        makeSupplierTable(response.value, " ");
     } else if (response.operation === "showArticle") {
-        makeArticlesTable(response.value);
+        makeArticlesTable(response.value, " ");
     } else if (response.operation === "showInvoice") {
-        makeInvoiceTable(response.value);
+        makeInvoiceTable(response.value, " ");
     } else if (response.operation === "modClient") {
-        makeClientsTable(response.value);
+        makeClientsTable(response.value,response.message);
     } else if (response.operation === "modArticle") {
-        makeArticlesTable(response.value);
+        makeArticlesTable(response.value, response.message);
     } else if (response.operation === "modSupplier") {
-        makeSupplierTable(response.value);
+        makeSupplierTable(response.value, response.message);
     } else if (response.operation === "searchArticle") {
-        makeArticlesTable(response.value);
+        makeArticlesTable(response.value, response.message);
     } else if (response.operation === "searchClient") {
-        makeClientsTable(response.value);
+        makeClientsTable(response.value, response.message);
     } else if (response.operation === "searchOperation") {
-        makeOperationTable(response.value);
+        makeOperationTable(response.value, response.message);
     } else if (response.operation === "searchInvoice") {
-        makeInvoiceTable(response.value);
+        makeInvoiceTable(response.value, response.message);
     } else if (response.operation === "searchSupplier") {
-        makeSupplierTable(response.value);
+        makeSupplierTable(response.value, response.message);
     }
 }
 //Gestione della finestra di dialogo per la cancellazione.
@@ -339,6 +339,7 @@ $(function () {
         $("#dialogModClient").dialog("open");
     });
 });
+//funzione che crea e recupera i dati per il form di modifica cliente.
 function modClient(i) {
     out = "<form name='modClient'>" +
             "<fieldset>" +
@@ -364,13 +365,14 @@ function modClient(i) {
 //funzione responsabile della generazione della tabella dei clienti, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
 //risultato ciò verrà visualizzato come risultato.
-function makeClientsTable(response) {
+function makeClientsTable(response,message) {
     if (response === "NON CI SONO CLIENTI") {
         out = "Non ci sono Clienti!";
     } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'><h>Codice Fiscale</h></div>";
+        out =  "<div> " + message + " </div><br>";
+        out += "<div class='outText'><h>Codice Fiscale</h></div>";
         out += "<div class='outText'><h>Nome</h></div>";
         out += "<div class='outText'><h>Cognome</h></div>";
         out += "<div class='outText'><h>Indirizzo</h></div>";
@@ -433,13 +435,14 @@ function addArticleForm(supplier) {
 //funzione responsabile della generazione della tabella dei clienti, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
 //risultato ciò verrà visualizzato come risultato.
-function makeArticlesTable(response) {
+function makeArticlesTable(response, message) {
     if (response === "NON CI SONO ARTICOLI") {
         out = "Non ci sono Articoli!";
     } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'><h>Codice Articolo</h></div>";
+        out =  "<div> " + message + " </div><br>";
+        out += "<div class='outText'><h>Codice Articolo</h></div>";
         out += "<div class='outText'><h>Categoria</h></div>";
         out += "<div class='outText'><h>Descrizione</h></div>";
         out += "<div class='outText'><h>Quantit&#224</h></div>";
@@ -511,6 +514,7 @@ $(function () {
         $("#dialogModArticle").dialog("open");
     });
 });
+//funzione che cre e recupare i dati per il form di modifica di un articolo.
 function modArticle(i) {
     out = "<form name='modArticle'>" +
             "<fieldset>" +
@@ -552,8 +556,8 @@ function makeInvoiceTable(response) {
             out += "<div class='outText'>" + response[i].id_fattura + "</div>" +
                     "<div class='outText'>" + response[i].tipo_pagamento + "</div>" +
                     "<div class='outText'>" + response[i].data_emissione + "</div>" +
-                    "<div class='outText'>" + response[i].totale + "</div>" +
-                    "<div class='outText'>" + response[i].totale_ivato + "</div>" +
+                    "<div class='outText'>" + response[i].totale + " Euro</div>" +
+                    "<div class='outText'>" + response[i].totale_ivato + " Euro</div>" +
                     "<div class='out'>" +
                     "<button id='" + response[i].id_fattura + "' onclick=printInvoice(this)><i class='fa fa-print fa-lg' aria-hidden='true'></i></button>" +
                     "</div><div class='row'></div>";
@@ -561,6 +565,7 @@ function makeInvoiceTable(response) {
     }
     $("#post").html(out);
 }
+//funzione che crea il Json per la richiesta dei dati necessari per la stampa fattura.
 function printInvoice(element) {
     //Recupero l'id della fattura da stampare
     idFattura = $(element).attr("id");
@@ -572,7 +577,8 @@ function printInvoice(element) {
     req = JSON.stringify(request);
     ajaxEvent(req);
 }
-
+//funzione che crea la pagina di stampa della fattura. Vengono passati in input 
+//le informazioni relativi al cliente e alle prestrazioni.
 function makePrintPage(fattura, cliente) {
     out = "<strong> Fattura rilasciata al Sign.:</strong><br><br>" +
             cliente[0].nome + " " + cliente[0].cognome + "<br> " + cliente[0].cf + "<br>" +
@@ -604,6 +610,7 @@ function makePrintPage(fattura, cliente) {
             "<br><div style='float:left;width:25%;align:center;'><b> Metodo di Pagamento: </b></div><div  style='float:left;width:25%;align:center;'>" + fattura[0].tipo_pagamento + "</div>";
     return out;
 }
+//imposta il documento di stampa
 function printDialog(data) {
     var w = 600;
     var h = 500;
@@ -616,13 +623,14 @@ function printDialog(data) {
 //metodo responsabile della generazione della tabella dei fornitori, i dati 
 //provengono da una query fatta al database, se questa non produce nessun 
 //risultato ciò verrà notificato come risultato.
-function makeSupplierTable(response) {
+function makeSupplierTable(response, message) {
     if (response === "NON CI SONO FORNITORI") {
         out = "Non ci sono Fornitori!";
     } else if (response === "NESSUN RISULTATO") {
         out = "Nessuna corrispondenza trovata!";
     } else {
-        out = "<div class='outText'><h>P. Iva</h></div>";
+        out =  "<div> " + message + " </div><br>";
+        out += "<div class='outText'><h>P. Iva</h></div>";
         out += "<div class='outText'><h>Ragione Sociale</h></div>";
         out += "<div class='outText'><h>Cellulare</h></div>";
         out += "<div class='outText'><h>Indirizzo</h></div>";
@@ -690,6 +698,7 @@ $(function () {
         $("#dialogModSupplier").dialog("open");
     });
 });
+//funzione che crea e recupera i dati per il form di modifica di un fornitore.
 function modSupplier(i) {
     out = "<form name='modSupplier'>" +
             "<fieldset>" +
@@ -806,9 +815,11 @@ $(function () {
         }
     }
     $(document).on('click', '.concludiOperation', function () {
+        $("#post").text("");
         concludiOperation();
     });
 });
+//funzione che crea il form che permette la creazione di una fattura.
 function makeFormFattura(response) {
     if (response === "NON CI SONO OPERAZIONI IN CORSO") {
         out = response;
